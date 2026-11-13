@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#21171d">
+<title>APRIL — Your Academic Assistant</title>
+<style>
+:root{--bg:#21171d;--panel:#30212a;--panel2:#3b2933;--line:#59404b;--rose:#e6a8b8;--rose2:#b96f86;--muted:#bcaab1;--text:#f8edf1;--red:#ff8298;--amber:#e9bd83;--green:#a7c9ae}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% 0%,#573342 0%,transparent 44%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}
+.shell{max-width:1440px;margin:auto;padding:22px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line);padding:8px 0 20px;margin-bottom:22px}.brand{display:flex;align-items:center;gap:13px}.orb{width:44px;height:44px;border:1px solid var(--rose);border-radius:50%;display:grid;place-items:center;color:var(--rose);box-shadow:0 0 22px #d58ba344,inset 0 0 14px #d58ba322;font-weight:800;letter-spacing:1px}.brand h1{font-size:21px;letter-spacing:3px;margin:0;color:var(--rose)}.brand small,.eyebrow{color:var(--muted);letter-spacing:2px;font-size:10px;font-weight:700}.status{color:var(--green);font-size:11px;letter-spacing:1.4px;display:flex;align-items:center;gap:8px}.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.layout{display:grid;grid-template-columns:225px minmax(0,1fr);gap:20px}.side,.panel,.stat{background:linear-gradient(145deg,#392832ee,#281d24ee);border:1px solid var(--line);border-radius:16px}.side{padding:16px;height:max-content;position:sticky;top:16px}.nav{display:grid;gap:7px;margin-top:14px}
+.nav-link{width:100%;background:transparent;border:1px solid transparent;color:var(--muted);padding:11px 12px;border-radius:10px;text-align:left}
+.nav-link.active{background:#503442;border-color:#805364;color:#f0bdca}
+.nav-link:not(.active):hover{background:#3b2933;border-color:#59404b;color:#f8edf1}
+.nav-context{position:fixed;z-index:1150;min-width:150px;padding:5px;background:#30212a;border:1px solid #805364;border-radius:10px;box-shadow:0 12px 35px #0008}
+.nav-context[hidden]{display:none}
+.nav-context button{display:block;width:100%;text-align:left;padding:9px 11px;border:0;border-radius:7px;background:transparent;color:#f2dce4;font-size:12px}
+.nav-context button:hover,.nav-context button:focus{background:#503442;outline:none}
+.pin-layer[hidden]{display:none}.pin-layer{position:fixed;inset:0;z-index:1200;background:rgba(15,10,14,.88);backdrop-filter:blur(10px);display:grid;place-items:center;padding:18px}
+.pin-card{width:min(100%,390px);background:linear-gradient(145deg,#432d38,#261b22);border:1px solid #916174;border-radius:18px;padding:24px;box-shadow:0 24px 80px #0008}
+.pin-card h2{margin:4px 0 8px;color:#f3c3d0;font-size:22px}.pin-card p{color:var(--muted);font-size:13px;line-height:1.5}
+.pin-card input{width:100%;background:#21171d;color:var(--text);border:1px solid #805364;border-radius:10px;padding:13px;margin:8px 0 12px;outline:none}
+.pin-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}.pin-error{min-height:18px;color:#f0a5b6;font-size:12px}
+@media(max-width:900px){.nav-item .nav-link{padding:9px 6px;font-size:12px}.nav-lock{flex-basis:31px;width:31px}}
+.side-note{border-top:1px solid var(--line);margin-top:20px;padding-top:14px;color:var(--muted);font-size:12px}main{min-width:0}.view{display:none}.view.active{display:block}.welcome{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:4px 0 18px}.welcome h2{font-size:clamp(23px,4vw,32px);margin:4px 0}.welcome p{margin:0;color:var(--muted)}.date{color:var(--rose);font-size:12px;letter-spacing:1px;text-align:right}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}.stat{padding:15px}.stat .num{font-size:30px;font-weight:750;letter-spacing:-1px}.stat small{color:var(--muted)}.rose{color:var(--rose)}.amber{color:var(--amber)}.red{color:var(--red)}.green{color:var(--green)}.grid2{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.8fr);gap:16px}.panel{padding:18px;margin-bottom:16px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.panel h3{font-size:14px;letter-spacing:1.3px;margin:0}.muted{color:var(--muted)}.btn{background:linear-gradient(100deg,#b96f86,#92516a);border:1px solid #e6a8b866;color:white;border-radius:9px;padding:9px 13px;font-weight:650}.btn.secondary{background:#44303a;border-color:var(--line);color:#f0bdca}.btn.danger{background:#512b39;border-color:#925267;color:#ffc0ce}.task-list,.entry-list{display:grid;gap:9px}.task,.entry{display:flex;align-items:center;gap:11px;background:#281c23;border:1px solid #503541;border-radius:11px;padding:11px}.task.done{opacity:.55}.task.done .task-title{text-decoration:line-through}.check{width:18px;height:18px;accent-color:#d88da3;flex:none}.task-main,.entry-main{min-width:0;flex:1}.task-title,.entry-title{font-weight:650;overflow-wrap:anywhere}.task-meta,.entry-meta{font-size:11px;color:var(--muted);overflow-wrap:anywhere}.tag{font-size:10px;padding:4px 7px;border-radius:20px;border:1px solid var(--line);white-space:nowrap;color:var(--rose)}.tag.late{color:var(--red);border-color:#71394a}.tag.soon{color:var(--amber);border-color:#70552e}.empty{padding:22px;text-align:center;color:var(--muted);border:1px dashed #765261;border-radius:10px;font-size:13px}.progress{height:8px;background:#49313c;border-radius:10px;overflow:hidden;margin:10px 0}.progress span{display:block;height:100%;background:linear-gradient(90deg,#b96f86,#f0bdca);border-radius:10px}.briefing{background:linear-gradient(140deg,#513342,#34242d);border:1px solid #805364;border-radius:14px;padding:16px}.briefing .ai{color:var(--rose);font-size:11px;letter-spacing:2px;font-weight:800}.briefing p{margin:8px 0 0;color:#f1dfe6;font-size:13px}
+.field{display:grid;gap:6px;margin-bottom:12px}.field label{font-size:11px;color:var(--muted);letter-spacing:.8px}.field input,.field select,.field textarea,.filters select{background:#261b22;color:var(--text);border:1px solid #674653;border-radius:9px;padding:10px;width:100%;outline:none}.field textarea{resize:vertical}.filters{display:flex;gap:8px;flex-wrap:wrap}.filters select{width:auto}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.inline-form{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.full{grid-column:1/-1}.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+.editor-toolbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:#21171d;border:1px solid #674653;border-bottom:0;border-radius:10px 10px 0 0;padding:8px}
+.editor-toolbar button{min-width:34px;height:32px;background:#44303a;border:1px solid #694755;color:#f5dce5;border-radius:7px;font-weight:750}
+.editor-toolbar button:hover{background:#63404f}
+.editor-toolbar select{background:#30212a;color:var(--text);border:1px solid #694755;border-radius:7px;padding:6px}
+.editor-toolbar .tool-label{font-size:10px;color:var(--muted);letter-spacing:.7px;margin-left:4px}
+.rich-editor{min-height:190px;background:#261b22;color:var(--text);border:1px solid #674653;border-radius:0 0 10px 10px;padding:14px;outline:none;line-height:1.65;overflow-wrap:anywhere}
+.rich-editor:focus{border-color:var(--rose);box-shadow:0 0 0 3px #e6a8b822}
+.rich-editor:empty:before{content:attr(data-placeholder);color:#987f8a;pointer-events:none}
+.note-body{white-space:normal;overflow-wrap:anywhere;color:#e8d8df;font-size:13px;line-height:1.65;margin-top:8px}
+.note-body p{margin:5px 0}.note-body ul,.note-body ol{padding-left:22px}
+.note-card{background:#281c23;border:1px solid #503541;border-radius:11px;padding:14px}.note-card h4{margin:0 0 5px}.note-card p{margin:7px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;color:#e8d8df;font-size:13px}.card-actions{display:flex;gap:7px;margin-top:12px}.card-actions button{padding:5px 9px;font-size:12px}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.mood-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.mood-choice{background:#281c23;border:1px solid #59404b;color:var(--text);border-radius:11px;padding:12px 6px;text-align:center}.mood-choice .emoji{font-size:26px;display:block}.mood-choice.selected{border:2px solid var(--rose);background:#503442}
+
+.shortcut-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.shortcut-card{min-width:0;min-height:150px;display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:17px;background:linear-gradient(145deg,#34232c,#281c23);border:1px solid #634653;border-radius:14px;color:var(--text);text-decoration:none;transition:transform .16s ease,border-color .16s ease,background .16s ease}
+.shortcut-card:hover{transform:translateY(-2px);border-color:#c47f96;background:linear-gradient(145deg,#49303b,#30212a)}
+.shortcut-icon{width:36px;height:36px;display:grid;place-items:center;border-radius:10px;background:#5a3948;color:#f5c6d4;font-weight:800;font-size:14px}
+.shortcut-name{font-size:14px;font-weight:750;overflow-wrap:anywhere}
+.shortcut-desc{font-size:11px;color:var(--muted)}
+.shortcut-open{margin-top:auto;padding-top:7px;color:#e6a8b8;font-size:10px;font-weight:800;letter-spacing:1px}
+.shortcut-custom form{width:100%;display:grid;gap:7px;margin-top:4px}
+.shortcut-custom input{width:100%;min-width:0;background:#21171d;color:var(--text);border:1px solid #694755;border-radius:8px;padding:9px;font-size:11px}
+.shortcut-custom .btn{font-size:11px;padding:8px}
+@media(max-width:900px){.shortcut-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.shortcut-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.shortcut-card{padding:13px;min-height:145px}.shortcut-name{font-size:12px}}
+.sleep-chart{width:100%;overflow:hidden;background:#261b22;border:1px solid #503541;border-radius:12px;padding:10px 8px;margin-bottom:10px}
+.sleep-chart svg{display:block;width:100%;height:auto;min-height:190px}
+.sleep-chart .gridline{stroke:#604653;stroke-width:1;stroke-dasharray:4 5}
+.sleep-chart .axis-label{fill:#b99eaa;font-size:11px}
+.sleep-chart .sleep-line{fill:none;stroke:#e6a8b8;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.sleep-chart .sleep-point{fill:#f0bdca;stroke:#392630;stroke-width:2}
+.sleep-chart .point-label{fill:#f5dce5;font-size:11px;font-weight:700}
+.mood-entry{background:#281c23;border:1px solid #503541;border-radius:11px;padding:13px}.mood-entry-head{display:flex;justify-content:space-between;gap:8px;align-items:center}.mood-entry p{white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0 0;color:#e8d8df;font-size:13px}.divider{height:1px;background:var(--line);margin:16px 0}.foot{color:#b18b9a;font-size:10px;text-align:center;padding:18px}
+.profile-btn{background:#44303a;border:1px solid var(--line);color:#f0bdca;border-radius:9px;padding:8px 11px;font-size:12px}
+.welcome-layer[hidden]{display:none}.welcome-layer{position:fixed;inset:0;z-index:1000;background:rgba(15,10,14,.88);backdrop-filter:blur(12px);display:grid;place-items:center;padding:20px}
+.welcome-card{width:min(100%,440px);background:linear-gradient(145deg,#432d38,#261b22);border:1px solid #916174;border-radius:20px;padding:28px;box-shadow:0 24px 80px #0008}
+.welcome-card .orb{margin-bottom:18px}.welcome-card h2{font-size:26px;margin:6px 0 8px;color:#f3c3d0}.welcome-card p{color:var(--muted);font-size:13px;margin:0 0 20px}.welcome-card input{width:100%;background:#261b22;color:var(--text);border:1px solid #805364;border-radius:10px;padding:13px;outline:none;margin-bottom:12px}.welcome-card input:focus{border-color:var(--rose);box-shadow:0 0 0 3px #e6a8b822}
+
+@media(max-width:900px){.layout{grid-template-columns:1fr}.side{position:static;padding:10px}.nav{grid-template-columns:repeat(4,1fr);margin:8px 0 0}.nav button{text-align:center;padding:9px 4px;font-size:12px}.side-note{display:none}.stats{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+@media(max-width:600px){.shell{padding:13px}.topbar{padding-bottom:14px}.brand h1{font-size:17px}.status{font-size:9px}.welcome{align-items:flex-start}.date{font-size:10px}.stat{padding:12px}.stat .num{font-size:25px}.panel{padding:14px}.task{align-items:flex-start;flex-wrap:wrap}.task .tag{margin-left:29px}.formgrid,.inline-form,.cards{grid-template-columns:1fr}.nav{grid-template-columns:repeat(3,1fr)}.mood-grid{grid-template-columns:repeat(3,1fr)}}
+
+#pinConfirmWrap[hidden]{display:none!important}
+
+#nameWelcome[hidden],#devicePasswordLayer[hidden]{display:none!important}
+
+#overviewLockStatus[hidden]{display:none!important}
+
+.task-status-select{background:#35232d;color:#f3dce4;border:1px solid #805364;border-radius:8px;padding:7px 8px;font-size:11px;max-width:112px;flex:none}
+.check-placeholder{width:18px;flex:none;text-align:center;color:var(--rose);font-size:18px}
+.todo-done{text-decoration:line-through;opacity:.58}
+.todo-entry .check{cursor:pointer}
+@media(max-width:620px){.task-status-select{max-width:96px;padding:6px 4px}.todo-entry{align-items:flex-start}}
+
+.spending-chart{display:grid;gap:16px;min-width:0}
+.chart-currency{background:#241820;border:1px solid #503541;border-radius:12px;padding:12px;min-width:0;overflow:hidden}
+.chart-currency-title{font-size:12px;font-weight:700;letter-spacing:.8px;color:var(--rose);margin:0 0 8px}
+.chart-currency svg{display:block;width:100%;height:auto;overflow:visible}
+.chart-gridline{stroke:#634452;stroke-width:1;opacity:.55}
+.chart-axis-label{fill:#b99eaa;font-size:10px}
+.spending-line{fill:none;stroke:#df91aa;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.chart-dot{fill:#f4c0d0;stroke:#412b35;stroke-width:1.5}
+
+/* User-customizable APRIL theme */
+#themeLayer[hidden]{display:none!important}
+.theme-colour-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:14px}
+.theme-colour-option{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 11px;background:var(--panel);border:1px solid var(--line);border-radius:10px;color:var(--text);font-size:12px}
+.theme-colour-option input{width:42px;height:32px;padding:2px;border:1px solid var(--line);border-radius:7px;background:transparent;cursor:pointer}
+.theme-preview{padding:12px;border-radius:13px;background:radial-gradient(ellipse at 80% 0%,var(--theme-glow,#573342) 0%,transparent 65%),var(--theme-bg,#21171d);border:1px solid var(--theme-border,#59404b)}
+.theme-preview-card{padding:14px;border-radius:10px;background:linear-gradient(145deg,var(--theme-panel,#30212a),var(--theme-bg,#21171d));border:1px solid var(--theme-border,#59404b);color:var(--theme-text,#f8edf1)}
+.theme-preview-title{color:var(--theme-heading,var(--theme-text,#f8edf1))}
+.theme-preview-brand{color:var(--theme-accent,#e6a8b8);font-weight:800;letter-spacing:3px;font-size:11px}
+.theme-preview-title{font-size:18px;font-weight:750;margin-top:8px}
+.theme-preview-copy{font-size:11px;opacity:.8;margin:3px 0 12px}
+.theme-preview-button{display:inline-block;padding:6px 10px;border-radius:7px;background:var(--theme-accent,#e6a8b8);color:var(--theme-bg,#21171d);font-size:11px;font-weight:700}
+@media(max-width:520px){.theme-colour-grid{grid-template-columns:1fr}.topbar>div:last-child{gap:6px!important}.profile-btn{font-size:11px;padding:7px 8px}}
+
+/* Keep the whole interface in sync with the selected palette. */
+.btn:not(.secondary):not(.danger){background:linear-gradient(100deg,var(--rose2),var(--rose));border-color:var(--rose)}
+.nav-link.active{background:color-mix(in srgb,var(--rose) 28%,var(--panel));border-color:var(--rose);color:var(--text)}
+.nav-link:not(.active):hover{background:color-mix(in srgb,var(--rose) 10%,var(--panel));border-color:var(--line);color:var(--text)}
+.nav-context{background:var(--panel);border-color:var(--line)}
+.nav-context button{color:var(--text)}
+.welcome-card,.pin-card{background:linear-gradient(145deg,var(--panel),var(--bg));border-color:var(--line);color:var(--text)}
+.welcome-card h2,.pin-card h2{color:var(--rose)}
+.welcome-card input,.pin-card input,input,textarea,select{border-color:var(--line)}
+
+
+/* Extended user palette: controls, typography, links and editable text surfaces. */
+.btn:not(.secondary):not(.danger),
+.theme-preview-button{
+  background:var(--button-bg)!important;
+  border-color:var(--button-bg)!important;
+  color:var(--button-text)!important;
+}
+.btn.secondary,.profile-btn,.editor-toolbar button{
+  background:var(--secondary-bg)!important;
+  border-color:var(--line)!important;
+  color:var(--secondary-text)!important;
+}
+.btn.danger,.danger,.delete-btn{
+  background:var(--danger-bg)!important;
+  border-color:var(--danger-bg)!important;
+  color:var(--danger-text)!important;
+}
+input:not([type="color"]),textarea,select,.field input,.field select,.field textarea,
+.filters select,.rich-editor,.shortcut-custom input,.welcome-card input,.pin-card input{
+  background-color:var(--input-bg)!important;
+  color:var(--input-text)!important;
+}
+input::placeholder,textarea::placeholder{color:var(--muted)!important;opacity:.85}
+h1,h2,h3,h4,h5,h6,.panel-title,.welcome-card h2,.pin-card h2{
+  color:var(--heading)!important;
+}
+p,.muted,.side-note,.field label,.tool-label,.shortcut-desc,.stat small,.foot{
+  color:var(--muted)!important;
+}
+a,.shortcut-open,.date,.rose,.welcome-card .eyebrow,.brand .eyebrow{
+  color:var(--link-text);
+}
+.note-body,.note-card p,.mood-entry p{color:var(--text)!important}
+.nav-link.active{background:color-mix(in srgb,var(--rose) 28%,var(--panel))!important;color:var(--text)!important}
+.nav-context,.nav-context button:hover,.nav-context button:focus{background:var(--panel)}
+.nav-context button{color:var(--text)}
+
+
+/* Subtle, consistent interaction motion across APRIL. */
+button,.btn,.profile-btn,.nav-link,.shortcut-card,.editor-toolbar button,
+.note-card,.mood-choice,.theme-colour-option,.welcome-card input,
+input,textarea,select,a,.task-status-select{
+  transition:
+    background-color .18s ease,
+    background .18s ease,
+    color .18s ease,
+    border-color .18s ease,
+    box-shadow .2s ease,
+    transform .18s cubic-bezier(.2,.75,.25,1),
+    opacity .18s ease;
+}
+button:hover,.btn:hover,.profile-btn:hover,.editor-toolbar button:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.06);
+}
+button:active,.btn:active,.profile-btn:active,.editor-toolbar button:active{
+  transform:translateY(1px) scale(.975);
+  filter:brightness(.96);
+  box-shadow:inset 0 2px 5px #0002;
+}
+.nav-link:hover:not(.active){
+  transform:translateX(3px);
+}
+.nav-link:active{
+  transform:translateX(1px) scale(.99);
+}
+.shortcut-card:hover{
+  transform:translateY(-3px);
+}
+.shortcut-card:active{
+  transform:translateY(-1px) scale(.985);
+}
+a:hover:not(.shortcut-card){
+  opacity:.86;
+}
+input:focus,textarea:focus,select:focus,.rich-editor:focus{
+  transition:border-color .18s ease,box-shadow .2s ease,background-color .18s ease;
+}
+.theme-colour-option:hover,.note-card:hover,.mood-choice:hover{
+  border-color:var(--rose);
+}
+button:focus-visible,.btn:focus-visible,.profile-btn:focus-visible,
+.nav-link:focus-visible,a:focus-visible,input:focus-visible,
+textarea:focus-visible,select:focus-visible{
+  outline:2px solid var(--rose);
+  outline-offset:3px;
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    scroll-behavior:auto!important;
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
+}
+
+
+/* APRIL signature app icon and brand lockup. */
+.brand-logo{
+  width:54px;height:54px;flex:none;display:block;object-fit:cover;
+  border-radius:15px;border:1px solid var(--line);
+  box-shadow:0 5px 18px #0002;
+  background:#f7efec;
+}
+.brand-copy{min-width:0}
+.brand-copy h1{margin:0}
+.brand-copy small{
+  display:block;max-width:290px;
+  color:var(--muted);font-size:10px;letter-spacing:.45px;
+  line-height:1.35;margin-top:2px;
+}
+@media(max-width:560px){
+  .brand-logo{width:46px;height:46px;border-radius:13px}
+  .brand-copy small{max-width:190px;font-size:9px}
+}
+
+
+/* Flexible subject and note category fields for every student's curriculum. */
+#homeworkForm input[name="subject"],#testForm input[name="subject"],#noteForm input[name="category"]{
+  min-width:0;
+}
+
+
+/* Images library: large previews with a responsive, clean gallery. */
+.image-upload-box{
+  min-height:150px;border:1.5px dashed var(--line);border-radius:14px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;padding:22px;text-align:center;cursor:pointer;
+  background:color-mix(in srgb,var(--panel) 78%,transparent);
+  transition:border-color .18s ease,background .18s ease,transform .18s ease;
+}
+.image-upload-box:hover{border-color:var(--rose);background:color-mix(in srgb,var(--rose) 8%,var(--panel));transform:translateY(-2px)}
+.image-upload-icon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--secondary-bg);color:var(--secondary-text);font-size:27px}
+.image-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px}
+.image-item{min-width:0;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--panel)}
+.image-item img{display:block;width:100%;height:auto;max-height:520px;object-fit:contain;background:var(--bg);cursor:zoom-in}
+.image-item-info{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px}
+.image-item-name{min-width:0;overflow-wrap:anywhere;font-size:12px;color:var(--text)}
+.image-item-info button{flex:none}
+.image-title-editor{display:flex;gap:8px;padding:0 12px 12px;align-items:center}
+.image-title-editor input{flex:1;min-width:0}
+.image-search-row{display:flex;gap:9px;align-items:center;margin:0 0 16px}
+.image-search-row input{flex:1;min-width:0}
+.image-search-help{font-size:12px;margin:-7px 0 14px}
+@media(max-width:600px){.image-gallery{grid-template-columns:1fr}.image-item img{max-height:420px}.image-search-row{flex-wrap:wrap}.image-search-row input{flex-basis:100%}}
+
+</style>
+</head>
+<body>
+<div class="welcome-layer" id="nameWelcome" hidden>
+  <form class="welcome-card" id="nameForm">
+    <div class="orb">A</div>
+    <div class="eyebrow">A PERSONAL SPACE, JUST FOR YOU</div>
+    <h2 id="nameHeading">Before we begin...</h2>
+    <p>What should APRIL call you? Your name will appear in your daily greetings and personal reminders.</p>
+    <label class="eyebrow" for="userNameInput">YOUR NAME</label>
+    <input id="userNameInput" name="name" maxlength="32" autocomplete="given-name" placeholder="e.g. Teresia" required>
+    <button class="btn" type="submit" style="width:100%">Let's get started →</button>
+  </form>
+</div>
+<div class="welcome-layer" id="themeLayer" hidden style="z-index:1300">
+  <div class="welcome-card" style="max-height:90vh;overflow:auto">
+    <div class="orb">A</div>
+    <div class="eyebrow">MAKE APRIL YOURS</div>
+    <h2>Customize your theme</h2>
+    <p>Customize the background, panels, text, buttons, inputs, links and borders. Every colour preview updates as you choose.</p>
+    <div class="theme-preview" id="themePreview">
+      <div class="theme-preview-card">
+        <div class="theme-preview-brand">APRIL</div>
+        <div class="theme-preview-title">A little preview</div>
+        <div class="theme-preview-copy">Your workspace, in your colours.</div>
+        <div class="theme-preview-button">Sample button</div>
+      </div>
+    </div>
+    <div class="theme-colour-grid">
+      <label class="theme-colour-option"><span>Background</span><input type="color" id="themeBg" value="#21171d"></label>
+      <label class="theme-colour-option"><span>Ombre glow</span><input type="color" id="themeGlow" value="#573342"></label>
+      <label class="theme-colour-option"><span>Panels & cards</span><input type="color" id="themePanel" value="#30212a"></label>
+      <label class="theme-colour-option"><span>Accent & active navigation</span><input type="color" id="themeAccent" value="#e6a8b8"></label>
+      <label class="theme-colour-option"><span>Main text</span><input type="color" id="themeText" value="#f8edf1"></label>
+      <label class="theme-colour-option"><span>Headings</span><input type="color" id="themeHeading" value="#f8edf1"></label>
+      <label class="theme-colour-option"><span>Secondary / muted text</span><input type="color" id="themeMuted" value="#c6aeb8"></label>
+      <label class="theme-colour-option"><span>Borders</span><input type="color" id="themeBorder" value="#59404b"></label>
+      <label class="theme-colour-option"><span>Primary buttons</span><input type="color" id="themeButton" value="#b8758d"></label>
+      <label class="theme-colour-option"><span>Primary button text</span><input type="color" id="themeButtonText" value="#21171d"></label>
+      <label class="theme-colour-option"><span>Secondary buttons</span><input type="color" id="themeSecondary" value="#44303a"></label>
+      <label class="theme-colour-option"><span>Secondary button text</span><input type="color" id="themeSecondaryText" value="#f0bdca"></label>
+      <label class="theme-colour-option"><span>Danger buttons</span><input type="color" id="themeDanger" value="#713b4a"></label>
+      <label class="theme-colour-option"><span>Danger button text</span><input type="color" id="themeDangerText" value="#ffe8ee"></label>
+      <label class="theme-colour-option"><span>Input fields</span><input type="color" id="themeInput" value="#261b22"></label>
+      <label class="theme-colour-option"><span>Input text</span><input type="color" id="themeInputText" value="#f8edf1"></label>
+      <label class="theme-colour-option"><span>Links & small highlights</span><input type="color" id="themeLink" value="#e6a8b8"></label>
+    </div>
+    <div class="form-actions" style="justify-content:space-between;margin-top:16px">
+      <button class="btn secondary" id="resetThemeBtn" type="button">Reset original</button>
+      <div style="display:flex;gap:8px"><button class="btn secondary" id="cancelThemeBtn" type="button">Cancel</button><button class="btn" id="saveThemeBtn" type="button">Save theme</button></div>
+    </div>
+  </div>
+</div>
+<div class="welcome-layer" id="profileLayer" hidden>
+  <form class="welcome-card" id="profileForm">
+    <div class="orb">A</div>
+    <div class="eyebrow">YOUR APRIL PROFILE</div>
+    <h2>Edit profile</h2>
+    <p>Change your display name anytime. To change your device password, enter your current password first.</p>
+    <label class="eyebrow" for="profileNameInput">YOUR NAME</label>
+    <input id="profileNameInput" type="text" maxlength="32" autocomplete="given-name" placeholder="Your name" required>
+    <div style="border-top:1px solid var(--line);margin:8px 0 14px;padding-top:14px">
+      <div class="eyebrow" style="margin-bottom:10px">CHANGE DEVICE PASSWORD (OPTIONAL)</div>
+      <label class="eyebrow" for="profileCurrentPassword">CURRENT PASSWORD</label>
+      <input id="profileCurrentPassword" type="password" autocomplete="current-password" placeholder="Enter your current password">
+      <label class="eyebrow" for="profileNewPassword">NEW PASSWORD</label>
+      <input id="profileNewPassword" type="password" minlength="6" maxlength="128" autocomplete="new-password" placeholder="At least 6 characters">
+      <label class="eyebrow" for="profileConfirmPassword">CONFIRM NEW PASSWORD</label>
+      <input id="profileConfirmPassword" type="password" minlength="6" maxlength="128" autocomplete="new-password" placeholder="Re-enter your new password">
+    </div>
+    <p id="profileError" role="alert" style="color:#f0a8b8;min-height:18px;margin:0 0 12px"></p>
+    <div style="display:flex;gap:8px">
+      <button class="btn" type="submit" style="flex:1">Save changes</button>
+      <button class="btn secondary" id="cancelProfileBtn" type="button">Cancel</button>
+    </div>
+  </form>
+</div>
+<div class="welcome-layer" id="devicePasswordLayer" hidden>
+  <form class="welcome-card" id="devicePasswordForm">
+    <div class="orb">A</div>
+    <div class="eyebrow">YOUR DEVICE · YOUR APRIL</div>
+    <h2 id="devicePasswordHeading">Create your device password</h2>
+    <p id="devicePasswordDescription">Choose a password to protect this APRIL installation. It will be saved only in this browser on this device.</p>
+    <label class="eyebrow" for="devicePasswordInput">PASSWORD</label>
+    <input id="devicePasswordInput" type="password" minlength="6" maxlength="128" autocomplete="new-password" placeholder="At least 6 characters" required>
+    <div id="devicePasswordConfirmWrap">
+      <label class="eyebrow" for="devicePasswordConfirm">CONFIRM PASSWORD</label>
+      <input id="devicePasswordConfirm" type="password" minlength="6" maxlength="128" autocomplete="new-password" placeholder="Enter your password again" required>
+    </div>
+    <p id="devicePasswordError" role="alert" style="color:#f0a8b8;min-height:18px;margin:0 0 12px"></p>
+    <button class="btn" id="devicePasswordSubmit" type="submit" style="width:100%">Save device password →</button>
+  </form>
+</div>
+<div class="shell">
+<header class="topbar"><div class="brand"><img class="brand-logo" src="data:image/webp;base64,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" alt="APRIL logo"><div class="brand-copy"><h1>APRIL</h1><small>Academic Personal Research &amp; Intelligence Link</small></div></div><div style="display:flex;align-items:center;gap:14px"><button class="profile-btn" id="openThemeBtn" type="button">◐ Theme</button><button class="profile-btn" id="editNameBtn" type="button">✎ Edit profile</button><div class="status"><span class="dot"></span> SYSTEM ONLINE</div></div></header>
+<div class="layout">
+<aside class="side"><div class="eyebrow">NAVIGATION</div><nav class="nav">
+<button class="nav-link active" data-view="overview" type="button">◈ Overview</button>
+<button class="nav-link" data-view="homework" type="button">▤ Homework</button>
+<button class="nav-link" data-view="tests" type="button">◎ Tests</button>
+<button class="nav-link" data-view="missing" type="button">⚑ Missing</button>
+<button class="nav-link" data-view="notes" type="button">▧ Notes</button>
+<button class="nav-link" data-view="ideas" type="button">✧ Ideas</button>
+<button class="nav-link" data-view="reminders" type="button">♧ Reminders</button>
+<button class="nav-link" data-view="moods" type="button">♡ Mood journal</button>
+<button class="nav-link" data-view="health" type="button">✚ Health</button>
+<button class="nav-link" data-view="todo" type="button">☑ Daily to-do</button>
+<button class="nav-link" data-view="money" type="button">＄ Money</button>
+<button class="nav-link" data-view="shortcuts" type="button">↗ Shortcuts</button>
+<button class="nav-link" data-view="images" type="button">▧ Images</button></nav><div class="side-note">LOCAL PROTOTYPE<br>Your entries are saved in this browser on this device.</div></aside>
+<main>
+<section id="overview" class="view active">
+<div class="welcome"><div><div class="eyebrow">PERSONAL STUDY SYSTEM</div><h2 id="greeting">Good day.</h2><p id="welcomeSubtitle">Here's your academic situation at a glance.</p></div><div style="display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;justify-content:flex-end"><div class="date" id="today"></div><button class="btn secondary" id="refreshOverviewBtn" type="button" title="Reload all saved APRIL information">↻ Refresh</button></div></div>
+<div class="panel" id="overviewLockStatus" hidden style="margin:0 0 16px">
+  <div class="panel-head"><h3>PRIVATE SECTIONS</h3><span class="tag">ACCESS PROTECTED</span></div>
+  <div id="overviewLockList" class="entry-list"></div>
+</div>
+<div class="stats"><div class="stat"><div class="eyebrow">PENDING</div><div class="num rose" id="pendingCount">0</div><small>Homework tasks</small></div><div class="stat"><div class="eyebrow">UPCOMING</div><div class="num amber" id="testCount">0</div><small>Future tests</small></div><div class="stat"><div class="eyebrow">OVERDUE</div><div class="num red" id="overdueCount">0</div><small>Unfinished tasks</small></div><div class="stat"><div class="eyebrow">COMPLETED</div><div class="num green" id="doneCount">0</div><small>Homework tasks</small></div></div>
+<div class="grid2"><div class="panel"><div class="panel-head"><h3>PRIORITY TASKS</h3><button class="btn secondary" onclick="showView('homework')">View homework</button></div><div id="priorityList" class="task-list"></div></div><div><div class="panel"><div class="panel-head"><h3>STUDY PROGRESS</h3></div><div class="eyebrow">HOMEWORK COMPLETION</div><div class="progress"><span id="progressBar" style="width:0%"></span></div><div id="progressText" class="muted" style="font-size:12px">0% completed</div></div><div class="briefing"><div class="ai">APRIL // DAILY BRIEFING</div><p id="briefing">Your dashboard is ready. Add a homework task or test to get started.</p></div></div></div>
+<div class="grid2"><div class="panel"><div class="panel-head"><h3>UPCOMING REMINDERS</h3><button class="btn secondary" onclick="showView('reminders')">View all</button></div><div id="dashboardReminders" class="entry-list"></div></div><div class="panel"><div class="panel-head"><h3>RECENT NOTES</h3><button class="btn secondary" onclick="showView('notes')">Open notes</button></div><div id="dashboardNotes" class="entry-list"></div></div></div>
+</section>
+<section id="homework" class="view"><div class="welcome"><div><div class="eyebrow">TASK MANAGEMENT</div><h2>Homework</h2><p>Keep every assignment on your radar.</p></div></div><div class="panel"><h3>ADD HOMEWORK</h3><form id="homeworkForm" class="inline-form"><div class="field"><label>SUBJECT</label><input name="subject" type="text" required maxlength="60" placeholder="Type a subject, e.g. Biology, History, Art"></div><div class="field"><label>ASSIGNMENT NAME</label><input name="name" required maxlength="100" placeholder="e.g. Cell membrane worksheet"></div><div class="field"><label>DUE DATE</label><input name="date" type="date" required></div><div class="field"><label>NOTES (OPTIONAL)</label><input name="notes" placeholder="Chapter, instructions..."></div><div class="form-actions full"><button class="btn" type="submit">＋ Add homework</button></div></form></div><div class="panel"><div class="panel-head"><h3>ALL ASSIGNMENTS</h3><div class="filters"><select id="homeworkFilter"><option value="all">All tasks</option><option value="pending">Pending</option><option value="done">Completed</option><option value="overdue">Overdue</option></select></div></div><div id="homeworkList" class="task-list"></div></div></section>
+<section id="tests" class="view"><div class="welcome"><div><div class="eyebrow">EXAM MONITOR</div><h2>Upcoming tests</h2><p>Know what's coming and prepare ahead.</p></div></div><div class="panel"><h3>ADD TEST</h3><form id="testForm" class="inline-form"><div class="field"><label>SUBJECT</label><input name="subject" type="text" required maxlength="60" placeholder="Type a subject, e.g. Biology, History, Art"></div><div class="field"><label>TEST NAME / TOPIC</label><input name="name" required placeholder="e.g. Enzymes test"></div><div class="field"><label>TEST DATE</label><input name="date" type="date" required></div><div class="field"><label>NOTES (OPTIONAL)</label><input name="notes" placeholder="Topics to revise..."></div><div class="form-actions full"><button class="btn" type="submit">＋ Add test</button></div></form></div><div class="panel"><div class="panel-head"><h3>TEST SCHEDULE</h3></div><div id="testList" class="task-list"></div></div></section>
+<section id="missing" class="view"><div class="welcome"><div><div class="eyebrow">ATTENTION REQUIRED</div><h2>Missing assignments</h2><p>Unfinished work past its due date.</p></div></div><div class="panel"><div class="panel-head"><h3>OVERDUE REGISTER</h3></div><div id="missingList" class="task-list"></div></div></section>
+<section id="notes" class="view"><div class="welcome"><div><div class="eyebrow">PERSONAL KNOWLEDGE SPACE</div><h2>Notes</h2><p>Keep class notes and useful information in one place.</p></div></div><div class="panel"><h3>CREATE A NOTE</h3><form id="noteForm" class="inline-form"><div class="field"><label>TITLE</label><input name="title" required maxlength="100" placeholder="Give your note a title"></div><div class="field"><label>CATEGORY</label><input name="category" type="text" maxlength="60" placeholder="Type a subject or category, e.g. History, Art, Personal"></div><div class="field full"><label>YOUR NOTE</label>
+<div class="editor-toolbar" role="toolbar" aria-label="Note formatting">
+  <button type="button" data-command="bold" title="Bold"><strong>B</strong></button>
+  <button type="button" data-command="italic" title="Italic"><em>I</em></button>
+  <button type="button" data-command="underline" title="Underline"><u>U</u></button>
+  <span class="tool-label">TEXT SIZE</span>
+  <select id="noteFontSize" aria-label="Text size"><option value="16">Normal</option><option value="14">Small</option><option value="18">Large</option><option value="22">Extra large</option><option value="26">Heading</option></select>
+</div>
+<div id="noteEditor" class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Write your class notes here..."></div>
+<div class="task-meta">Select text and use the toolbar to format it. You can mix different styles in the same note.</div>
+</div><div class="form-actions full"><button class="btn" type="submit">＋ Save note</button></div></form></div><div class="panel"><div class="panel-head"><h3>SAVED NOTES</h3><input id="noteSearch" aria-label="Search notes" placeholder="Search notes..." style="max-width:220px;background:#261b22;color:var(--text);border:1px solid #674653;border-radius:9px;padding:9px"></div><div id="noteList" class="cards"></div></div></section>
+<section id="ideas" class="view"><div class="welcome"><div><div class="eyebrow">IDEA SPACE</div><h2>Ideas</h2><p>Save spontaneous thoughts, projects and plans.</p></div></div><div class="panel"><h3>CAPTURE AN IDEA</h3><form id="ideaForm" class="inline-form"><div class="field"><label>IDEA TITLE</label><input name="title" required placeholder="What's your idea?"></div><div class="field"><label>CATEGORY</label><select name="category"><option>School project</option><option>Creative</option><option>Personal</option><option>Future plans</option><option>Other</option></select></div><div class="field full"><label>DETAILS (OPTIONAL)</label><textarea name="body" rows="3" placeholder="Add a few details..."></textarea></div><div class="field"><label>STATUS</label><select name="status"><option>Developing</option><option>Someday</option><option>Completed</option></select></div><div class="form-actions"><button class="btn" type="submit">＋ Save idea</button></div></form></div><div class="panel"><div class="panel-head"><h3>YOUR IDEAS</h3></div><div id="ideaList" class="cards"></div></div></section>
+<section id="reminders" class="view"><div class="welcome"><div><div class="eyebrow">DON'T FORGET</div><h2>Reminders</h2><p>Little things you want to remember.</p></div></div><div class="panel"><h3>ADD A REMINDER</h3><form id="reminderForm" class="inline-form"><div class="field"><label>REMINDER</label><input name="title" required placeholder="e.g. Bring biology textbook"></div><div class="field"><label>DATE & TIME</label><input name="when" type="datetime-local" required></div><div class="field"><label>PRIORITY</label><select name="priority"><option>Normal</option><option>Important</option><option>Urgent</option></select></div><div class="field"><label>DETAILS (OPTIONAL)</label><input name="details" placeholder="Anything else to remember?"></div><div class="form-actions full"><button class="btn" type="submit">＋ Add reminder</button></div></form></div><div class="panel"><div class="panel-head"><h3>YOUR REMINDERS</h3></div><div id="reminderList" class="entry-list"></div></div></section>
+
+
+<section id="todo" class="view">
+  <div class="welcome"><div><div class="eyebrow">DAILY RESET · 24 HOURS</div><h2>Today's to-do list</h2><p>A simple checklist for what you would like to get done today.</p></div><div class="date" id="todoResetLabel">Resets every 24 hours</div></div>
+  <div class="panel">
+    <div class="panel-head"><h3>ADD A TASK</h3><span class="tag" id="todoProgress">0 completed</span></div>
+    <form id="todoForm" class="inline-form">
+      <div class="field"><label for="todoTitle">WHAT WOULD YOU LIKE TO DO?</label><input id="todoTitle" name="title" maxlength="120" placeholder="e.g. Review Biology notes" required></div>
+      <div class="field"><label for="todoTime">OPTIONAL TIME</label><input id="todoTime" name="time" type="time"></div>
+      <div class="form-actions full"><button class="btn" type="submit">＋ Add to list</button></div>
+    </form>
+  </div>
+  <div class="panel"><div class="panel-head"><h3>YOUR CHECKLIST</h3><span class="muted" id="todoCountdown">Refreshes after 24 hours</span></div><div id="todoList" class="entry-list"></div></div>
+</section>
+
+<section id="money" class="view">
+  <div class="welcome"><div><div class="eyebrow">PERSONAL FINANCE TRACKER</div><h2>Money</h2><p>Keep track of what you buy and what you're saving up for.</p></div><div class="date" id="moneyMonthLabel"></div></div>
+  <div class="stats" id="moneySummary">
+    <div class="stat"><div class="eyebrow">PURCHASES THIS MONTH</div><div class="num rose" id="purchaseCount">0</div><small>Recorded purchases</small></div>
+    <div class="stat"><div class="eyebrow">CURRENCIES USED</div><div class="num amber" id="currencyCount">0</div><small>Separate currency totals</small></div>
+    <div class="stat"><div class="eyebrow">WISHLIST</div><div class="num" id="wishlistCount">0</div><small>Things you want to buy</small></div>
+    <div class="stat"><div class="eyebrow">WISHLIST VALUE</div><div class="num green" id="wishlistCurrencies">—</div><small>Grouped by currency</small></div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>ADD A PURCHASE</h3><span class="tag">THIS MONTH</span></div>
+    <form id="purchaseForm" class="inline-form">
+      <div class="field"><label for="purchaseName">WHAT DID YOU BUY?</label><input id="purchaseName" name="name" maxlength="100" placeholder="e.g. Lunch, notebook, lipstick" required></div>
+      <div class="field"><label for="purchaseAmount">AMOUNT</label><small class="task-meta">You can type 50,000 or 50.000 for fifty thousand.</small><input id="purchaseAmount" name="amount" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 50,000 or 50.000" required></div>
+      <div class="field"><label for="purchaseCurrency">CURRENCY (EDITABLE)</label><input id="purchaseCurrency" name="currency" maxlength="12" value="IDR" placeholder="e.g. IDR, USD, SGD" required></div>
+      <div class="field"><label for="purchaseCategory">CATEGORY</label><select id="purchaseCategory" name="category" required><option>Food</option><option>Makeup</option><option>School</option><option>Toys</option><option>Accessories</option><option>Clothing</option><option>Transport</option><option>Entertainment</option><option>Personal care</option><option>Other</option></select></div>
+      <div class="field"><label for="purchaseDate">DATE</label><input id="purchaseDate" name="date" type="date" required></div>
+      <div class="form-actions full"><button class="btn" type="submit">＋ Record purchase</button></div>
+    </form>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>THIS MONTH'S SPENDING</h3><span class="muted">Totals stay separate by currency</span></div>
+    <div id="spendingTotals" class="entry-list"></div>
+    <div id="categoryTotals" class="entry-list" style="margin-top:14px"></div>
+    <div class="panel-head" style="margin-top:22px"><h3>SPENDING TREND</h3><span class="muted">Daily spending · current month</span></div>
+    <div id="spendingChart" class="spending-chart"><div class="empty">Your spending graph will appear after you record purchases.</div></div>
+    <div class="task-meta">Each currency has its own graph. The line shows how much you spent each day, so it can rise or fall without mixing currencies.</div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>PURCHASE HISTORY</h3><span class="muted" id="purchaseHistoryLabel">Current month</span></div>
+    <div id="purchaseList" class="entry-list"></div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>MY WISHLIST</h3><span class="tag">THINGS TO SAVE FOR</span></div>
+    <form id="wishlistForm" class="inline-form">
+      <div class="field"><label for="wishName">WHAT DO YOU WANT TO BUY?</label><input id="wishName" name="name" maxlength="100" placeholder="e.g. A new sketchbook" required></div>
+      <div class="field"><label for="wishAmount">ESTIMATED PRICE</label><small class="task-meta">You can type 120,000 or 120.000 for one hundred twenty thousand.</small><input id="wishAmount" name="amount" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 120,000 or 120.000" required></div>
+      <div class="field"><label for="wishCurrency">CURRENCY (EDITABLE)</label><input id="wishCurrency" name="currency" maxlength="12" value="IDR" placeholder="e.g. IDR, USD, SGD" required></div>
+      <div class="field"><label for="wishCategory">CATEGORY</label><select id="wishCategory" name="category"><option>School</option><option>Makeup</option><option>Clothing</option><option>Accessories</option><option>Toys</option><option>Books</option><option>Technology</option><option>Other</option></select></div>
+      <div class="form-actions full"><button class="btn" type="submit">＋ Add to wishlist</button></div>
+    </form>
+    <div id="wishlistList" class="entry-list" style="margin-top:14px"></div>
+  </div>
+</section>
+
+<section id="shortcuts" class="view">
+  <div class="welcome"><div><div class="eyebrow">YOUR SCHOOL TOOLKIT</div><h2>Shortcuts</h2><p>Your favourite school websites, all in one place.</p></div></div>
+  <div class="panel" style="margin-top:16px">
+    <div class="panel-head"><div><h3>YOUR SHORTCUTS</h3><p class="task-meta" style="margin:5px 0 0">Add the websites you use. Right-click or press and hold any shortcut to edit or remove it.</p></div><button class="btn" id="addShortcutBtn" type="button">＋ Add shortcut</button></div>
+    <form id="customShortcutForm" class="inline-form" hidden style="margin:12px 0 16px">
+      <div class="field"><label for="customShortcutName">SHORTCUT NAME</label><input id="customShortcutName" name="name" maxlength="32" placeholder="e.g. School Portal" required></div>
+      <div class="field"><label for="customShortcutUrl">WEBSITE URL</label><input id="customShortcutUrl" name="url" type="url" placeholder="https://example.com" required></div>
+      <div class="form-actions"><button class="btn" id="saveShortcutBtn" type="submit">Save shortcut</button><button class="btn secondary" id="cancelShortcutBtn" type="button">Cancel</button></div>
+    </form>
+    <div class="shortcut-grid" id="customShortcutGrid"><div class="empty" style="grid-column:1/-1">No shortcuts yet. Add your first website.</div></div>
+  </div>
+  <div class="nav-context" id="shortcutContextMenu" hidden>
+    <button type="button" data-action="edit">Edit shortcut</button>
+    <button type="button" data-action="remove">Remove shortcut</button>
+  </div>
+</section>
+<section id="health" class="view">
+<div class="welcome"><div><div class="eyebrow">PERSONAL WELLBEING</div><h2>Sleep tracker</h2><p>Keep a gentle record of your sleep and notice patterns over time.</p></div><div class="date" id="sleepToday"></div></div>
+<div class="stats">
+  <div class="stat"><div class="eyebrow">AVERAGE SLEEP</div><div class="num rose" id="sleepAverage">—</div><small>Hours per recorded night</small></div>
+  <div class="stat"><div class="eyebrow">LAST NIGHT</div><div class="num amber" id="sleepLatest">—</div><small>Most recent entry</small></div>
+  <div class="stat"><div class="eyebrow">RECORDED DAYS</div><div class="num" id="sleepDays">0</div><small>Sleep entries</small></div>
+  <div class="stat"><div class="eyebrow">RECENT TREND</div><div class="num rose" id="sleepTrend">—</div><small>Compared with previous entry</small></div>
+</div>
+<div class="panel">
+  <div class="panel-head"><h3>LOG YOUR SLEEP</h3><span class="tag" id="sleepFormStatus">DAILY CHECK-IN</span></div>
+  <form id="sleepForm">
+    <div class="formgrid">
+      <div class="field"><label for="sleepDate">DATE</label><input id="sleepDate" type="date" required></div>
+      <div class="field"><label for="sleepHours">HOURS OF SLEEP</label><input id="sleepHours" type="number" min="0" max="24" step="0.25" placeholder="e.g. 8" required></div>
+    </div>
+    <div class="task-meta" style="margin:0 0 12px">You can enter part-hours too, such as 7.5. Adding another entry for the same date will update it.</div>
+    <div class="form-actions"><button class="btn" type="submit">＋ Save sleep entry</button><button class="btn secondary" type="button" id="cancelSleepEdit" hidden>Cancel edit</button></div>
+  </form>
+</div>
+<div class="panel">
+  <div class="panel-head"><h3>SLEEP HISTORY</h3><span class="muted" id="sleepChartCaption">Hours per night</span></div>
+  <div id="sleepChart" class="sleep-chart"><div class="empty">Your line graph will appear once you add sleep entries.</div></div>
+  <div class="task-meta">The graph shows your recorded hours over time. A rising line means longer sleep, while a falling line means shorter sleep—it doesn't automatically mean better or worse sleep.</div>
+</div>
+<div class="panel">
+  <div class="panel-head"><h3>RECENT ENTRIES</h3><span class="muted" id="sleepCount"></span></div>
+  <div id="sleepHistory" class="entry-list"></div>
+</div>
+</section>
+<section id="moods" class="view"><div class="welcome"><div><div class="eyebrow">PERSONAL WELLBEING</div><h2>Mood journal</h2><p>A private space to check in with yourself. No scores, no judgement.</p></div></div><div class="panel"><div class="panel-head"><h3>DAILY CHECK-IN</h3><span class="tag" id="moodToday"></span></div><form id="moodForm"><div class="field"><label>HOW ARE YOU FEELING TODAY?</label><div class="mood-grid" id="moodChoices"><button type="button" class="mood-choice" data-mood="Amazing"><span class="emoji">🤩</span>Amazing</button><button type="button" class="mood-choice" data-mood="Good"><span class="emoji">😊</span>Good</button><button type="button" class="mood-choice" data-mood="Okay"><span class="emoji">😐</span>Okay</button><button type="button" class="mood-choice" data-mood="Low"><span class="emoji">😔</span>Low</button><button type="button" class="mood-choice" data-mood="Stressed"><span class="emoji">😣</span>Stressed</button><button type="button" class="mood-choice" data-mood="Tired"><span class="emoji">😴</span>Tired</button></div></div><div class="field"><label>NOTES ABOUT YOUR DAY (OPTIONAL)</label><textarea id="moodNote" rows="5" placeholder="What happened today? What's on your mind? Anything you want to remember..."></textarea></div><div class="form-actions"><button class="btn" type="submit">Save today's entry</button></div></form></div><div class="panel"><div class="panel-head"><h3>PAST ENTRIES</h3><span class="muted" id="moodCount"></span></div><div id="moodHistory" class="entry-list"></div></div></section>
+
+<section id="images" class="view">
+  <div class="welcome">
+    <div><div class="eyebrow">VISUAL STUDY SPACE</div><h2>Images</h2><p>Keep schedules, timetables, reference pictures and other useful images together.</p></div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>ADD IMAGES</h3><span class="tag">MULTIPLE FILES</span></div>
+    <p class="muted" style="font-size:13px;margin:0 0 14px">Choose more than one image at a time. Your images are resized for storage and saved in this browser on this device.</p>
+    <label class="image-upload-box" for="imageUploadInput">
+      <span class="image-upload-icon">＋</span>
+      <strong>Choose images to upload</strong>
+      <span class="muted" style="font-size:12px">JPG, PNG, WEBP and other browser-supported image formats</span>
+    </label>
+    <input id="imageUploadInput" type="file" accept="image/*" multiple hidden>
+    <p id="imageUploadStatus" class="muted" role="status" aria-live="polite" style="font-size:12px;margin:12px 0 0"></p>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>YOUR IMAGE LIBRARY</h3><span class="muted" id="imageCount">0 images</span></div>
+    <form id="imageSearchForm" class="image-search-row" role="search">
+      <input id="imageSearchInput" type="search" placeholder="Search by image title or filename…" aria-label="Search images">
+      <button class="btn secondary" type="submit">Search</button>
+      <button class="btn secondary" id="clearImageSearch" type="button">Clear</button>
+    </form>
+    <p class="muted image-search-help" id="imageSearchStatus" aria-live="polite">Search your saved images by title or original filename.</p>
+    <div id="imageGallery" class="image-gallery"><div class="empty">Your uploaded images will appear here.</div></div>
+  </div>
+</section>
+</main></div><div class="foot">APRIL · ACADEMIC & PERSONAL ORGANISER · YOUR DATA STAYS IN THIS BROWSER</div></div>
+<div class="nav-context" id="navContextMenu" role="menu" hidden>
+<button type="button" id="navContextAction" role="menuitem">Lock section</button>
+<button type="button" id="navContextChangePin" role="menuitem">Change PIN</button>
+</div>
+<div class="pin-layer" id="pinLayer" hidden><form class="pin-card" id="pinForm">
+<div class="eyebrow">APRIL · SECTION PRIVACY</div><h2 id="pinTitle">Protect this section</h2>
+<p id="pinDescription">Create one PIN to use for every section you choose to lock.</p>
+<label class="field"><span class="eyebrow" id="pinLabel">CREATE A 4–8 DIGIT PIN</span><input id="pinInput" type="password" inputmode="numeric" autocomplete="off" maxlength="8" minlength="4" pattern="[0-9]{4,8}" placeholder="4–8 digit PIN" required></label>
+<label class="field" id="pinConfirmWrap" hidden><span class="eyebrow">CONFIRM NEW PIN</span><input id="pinConfirm" type="password" inputmode="numeric" autocomplete="off" maxlength="8" minlength="4" pattern="[0-9]{4,8}" placeholder="Re-enter new PIN"></label>
+<div class="pin-error" id="pinError" role="alert"></div>
+<div class="pin-actions"><button class="btn secondary" type="button" id="pinCancel">Cancel</button><button class="btn" type="submit" id="pinSubmit">Create PIN</button></div>
+<p style="font-size:10px;margin:12px 0 0">This is a convenience lock for casual privacy, not strong security. Someone with access to your device may still inspect the website or browser storage.</p>
+</form></div>
+<script>
+const STORAGE_KEY='april-organiser-v1';
+const emptyData={homework:[],tests:[],notes:[],ideas:[],reminders:[],moods:[],health:[],dailyTodos:[],purchases:[],wishlist:[]};
+function loadData(){
+ let loaded;
+ try{
+   const current=localStorage.getItem(STORAGE_KEY);
+   if(current)loaded={...emptyData,...JSON.parse(current)};
+   else{
+     const legacy=JSON.parse(localStorage.getItem('jarvis-academic-v1')||'null');
+     loaded=legacy?{...emptyData,homework:legacy.homework||[],tests:legacy.tests||[]}:{...emptyData};
+   }
+ }catch(e){loaded={...emptyData}}
+ Object.keys(emptyData).forEach(key=>{if(!Array.isArray(loaded[key]))loaded[key]=[]});
+ return loaded;
+}
+let data=loadData();let selectedMood='Good';
+function saveData(){
+ try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));return true}
+ catch(error){alert('APRIL could not save your changes in this browser. Check that browser storage is available, then try again.');return false}
+}
+function todayISO(){const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
+function esc(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function niceDate(s){if(!s)return '';const d=new Date(s.length===10?s+'T00:00:00':s);return d.toLocaleString(undefined,s.length===10?{day:'numeric',month:'short',year:'numeric'}:{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'})}
+function daysUntil(s){return Math.ceil((new Date(s+'T00:00:00')-new Date(todayISO()+'T00:00:00'))/86400000)}
+function isLate(t){return t.status!=='done'&&t.date<todayISO()}
+function id(){return (crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()))}
+
+const PIN_HASH_KEY='april-section-pin-hash',PIN_SALT_KEY='april-section-pin-salt',LOCKED_SECTIONS_KEY='april-locked-sections';
+let lockedSections=(()=>{try{return JSON.parse(localStorage.getItem(LOCKED_SECTIONS_KEY)||'[]')}catch(e){return []}})();
+let pinMode=null,pinTarget=null;
+function saveLockedSections(){
+ localStorage.setItem(LOCKED_SECTIONS_KEY,JSON.stringify(lockedSections));
+ updateOverviewLockStatus();
+ if(typeof renderNotes==='function')renderNotes();
+}
+function showView(view){document.querySelectorAll('.nav-link').forEach(b=>b.classList.toggle('active',b.dataset.view===view));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===view))}
+function updateOverviewLockStatus(){
+ const panel=document.getElementById('overviewLockStatus');
+ const list=document.getElementById('overviewLockList');
+ if(!panel||!list)return;
+ const labels={homework:'Homework',tests:'Tests',missing:'Missing assignments',notes:'Notes',ideas:'Ideas',reminders:'Reminders',moods:'Mood journal',health:'Health',todo:'Daily to-do',money:'Money',shortcuts:'Shortcuts'};
+ const locked=lockedSections.filter(key=>labels[key]);
+ panel.hidden=locked.length===0;
+ list.innerHTML=locked.map(key=>`<div class="entry"><div class="entry-main"><div class="entry-title">${labels[key]}</div></div><span class="tag" style="color:var(--rose);border-color:var(--rose)">LOCKED</span></div>`).join('');
+}
+async function hashPin(pin,salt){
+ if(window.crypto&&crypto.subtle){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(salt+':'+pin));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('')}
+ let h=2166136261;for(const ch of salt+':'+pin){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return (h>>>0).toString(16)
+}
+function openPinDialog(mode,target){
+ pinMode=mode;pinTarget=target;
+ const input=document.getElementById('pinInput'),confirmWrap=document.getElementById('pinConfirmWrap'),confirmInput=document.getElementById('pinConfirm');
+ input.value='';confirmInput.value='';confirmWrap.hidden=true;confirmWrap.style.display='';if(mode==='change-set')confirmWrap.hidden=false;
+ document.getElementById('pinError').textContent='';
+ const titles={setup:'Create your APRIL PIN',unlock:'Unlock this section',access:'Enter your PIN','change-verify':'Verify your current PIN','change-set':'Choose a new PIN'};
+ const descriptions={setup:'Set one PIN to use for every section you choose to lock. You only need to create it once.',unlock:'Enter your PIN to remove the lock from this section.',access:'This section is protected. Enter your PIN to open it.','change-verify':'Enter your current PIN before you can change it.','change-set':'Choose a new 4–8 digit PIN, then confirm it below.'};
+ document.getElementById('pinTitle').textContent=titles[mode]||'Enter your PIN';
+ document.getElementById('pinDescription').textContent=descriptions[mode]||'Enter your PIN.';
+ document.getElementById('pinLabel').textContent=(mode==='setup'||mode==='change-set')?'NEW 4–8 DIGIT PIN':'YOUR CURRENT PIN';
+ document.getElementById('pinSubmit').textContent=mode==='setup'?'Create PIN':mode==='change-set'?'Save new PIN':'Verify PIN';
+ document.getElementById('pinLayer').hidden=false;setTimeout(()=>input.focus(),30)
+}
+function closePinDialog(){document.getElementById('pinLayer').hidden=true;document.getElementById('pinInput').value='';document.getElementById('pinConfirm').value='';document.getElementById('pinConfirmWrap').hidden=true;pinMode=null;pinTarget=null}
+document.getElementById('pinCancel').addEventListener('click',closePinDialog);
+document.getElementById('pinLayer').addEventListener('click',e=>{if(e.target.id==='pinLayer')closePinDialog()});
+document.getElementById('pinForm').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const pin=document.getElementById('pinInput').value,error=document.getElementById('pinError');
+ if(!/^\d{4,8}$/.test(pin)){error.textContent='Please enter 4 to 8 digits.';return}
+ const mode=pinMode,target=pinTarget;
+ if(mode==='setup'){
+   const bytes=window.crypto?.getRandomValues?crypto.getRandomValues(new Uint8Array(16)):new Uint8Array(Array.from({length:16},()=>Math.floor(Math.random()*256)));
+   const salt=Array.from(bytes).map(b=>b.toString(16).padStart(2,'0')).join('');
+   const hash=await hashPin(pin,salt);localStorage.setItem(PIN_SALT_KEY,salt);localStorage.setItem(PIN_HASH_KEY,hash);
+   lockedSections.push(target);saveLockedSections();closePinDialog();showView(target);return
+ }
+ if(mode==='change-set'){
+   const confirmation=document.getElementById('pinConfirm').value;
+   if(!/^\d{4,8}$/.test(confirmation)){error.textContent='Please confirm your new PIN using 4 to 8 digits.';return}
+   if(pin!==confirmation){error.textContent='The new PINs do not match. Please try again.';document.getElementById('pinConfirm').value='';document.getElementById('pinConfirm').focus();return}
+   const bytes=window.crypto?.getRandomValues?crypto.getRandomValues(new Uint8Array(16)):new Uint8Array(Array.from({length:16},()=>Math.floor(Math.random()*256)));
+   const salt=Array.from(bytes).map(b=>b.toString(16).padStart(2,'0')).join('');
+   const hash=await hashPin(pin,salt);
+   localStorage.setItem(PIN_SALT_KEY,salt);localStorage.setItem(PIN_HASH_KEY,hash);
+   closePinDialog();return
+ }
+ const salt=localStorage.getItem(PIN_SALT_KEY)||'',expected=localStorage.getItem(PIN_HASH_KEY)||'',actual=await hashPin(pin,salt);
+ if(actual!==expected){error.textContent='That PIN is not correct. Please try again.';document.getElementById('pinInput').value='';document.getElementById('pinInput').focus();return}
+ if(mode==='change-verify'){
+   closePinDialog();
+   openPinDialog('change-set',null);
+   document.getElementById('pinTitle').textContent='Set your new PIN';
+   document.getElementById('pinDescription').textContent='Your current PIN has been confirmed. Enter a new 4–8 digit PIN and confirm it below.';
+   document.getElementById('pinLabel').textContent='NEW 4–8 DIGIT PIN';
+   document.getElementById('pinSubmit').textContent='Confirm PIN change';
+   return
+ }
+ if(mode==='unlock'){lockedSections=lockedSections.filter(x=>x!==target);saveLockedSections();closePinDialog();return}
+ closePinDialog();showView(target)
+});
+
+document.querySelectorAll('.nav-link').forEach(btn=>{
+ btn.addEventListener('click',()=>{const view=btn.dataset.view;if(lockedSections.includes(view))openPinDialog('access',view);else showView(view)});
+ btn.addEventListener('contextmenu',event=>{
+   event.preventDefault();const menu=document.getElementById('navContextMenu'),action=document.getElementById('navContextAction');
+   menu.dataset.target=btn.dataset.view;
+   const locked=lockedSections.includes(btn.dataset.view);
+   action.textContent=locked?'Unlock section':'Lock section';
+   menu.hidden=false;
+   const x=Math.min(event.clientX,window.innerWidth-170),y=Math.min(event.clientY,window.innerHeight-90);
+   menu.style.left=Math.max(8,x)+'px';menu.style.top=Math.max(8,y)+'px';
+ });
+});
+document.getElementById('navContextAction').addEventListener('click',()=>{
+ const menu=document.getElementById('navContextMenu'),view=menu.dataset.target;
+ menu.hidden=true;
+ if(!view)return;
+ if(lockedSections.includes(view)){openPinDialog('unlock',view);return}
+ if(!localStorage.getItem(PIN_HASH_KEY)){openPinDialog('setup',view);return}
+ lockedSections.push(view);saveLockedSections();
+});
+document.getElementById('navContextChangePin').addEventListener('click',()=>{
+ document.getElementById('navContextMenu').hidden=true;
+ if(!localStorage.getItem(PIN_HASH_KEY))return;
+ openPinDialog('change-verify',null);
+});
+document.addEventListener('click',event=>{
+ const menu=document.getElementById('navContextMenu');
+ if(!menu.hidden&&!menu.contains(event.target))menu.hidden=true;
+});
+document.addEventListener('keydown',event=>{
+ if(event.key==='Escape')document.getElementById('navContextMenu').hidden=true;
+});
+window.addEventListener('scroll',()=>{document.getElementById('navContextMenu').hidden=true},true);
+
+
+function taskHTML(t,type){const late=type==='homework'&&isLate(t),soon=type==='homework'&&daysUntil(t.date)<=2&&daysUntil(t.date)>=0;return `<div class="task ${t.status==='done'?'done':''}">${type==='homework'?`<select class="task-status-select" aria-label="Homework status" onchange="setHomeworkStatus('${t.id}',this.value)"><option value="pending" ${t.status!=='done'?'selected':''}>Pending</option><option value="done" ${t.status==='done'?'selected':''}>Completed</option></select>`:'<span class="check-placeholder">◎</span>'}<div class="task-main"><div class="task-title">${esc(t.name)}</div><div class="task-meta">${esc(t.subject)} · ${type==='test'?'Test':'Due'} ${niceDate(t.date)}${t.notes?' · '+esc(t.notes):''}</div></div><span class="tag ${late?'late':soon?'soon':''}">${late?'OVERDUE':t.status==='done'?'COMPLETED':soon?'DUE SOON':type==='test'?(daysUntil(t.date)===0?'TODAY':daysUntil(t.date)+' DAYS'):'PENDING'}</span><button class="btn danger" onclick="deleteItem('${type}','${t.id}')" aria-label="Delete">×</button></div>`}
+function fillList(idName,items,type,empty){document.getElementById(idName).innerHTML=items.length?items.map(t=>taskHTML(t,type)).join(''):`<div class="empty">${empty}</div>`}
+function renderTasks(){const hw=data.homework,tests=data.tests,late=hw.filter(isLate),pending=hw.filter(t=>t.status!=='done'),done=hw.filter(t=>t.status==='done');document.getElementById('pendingCount').textContent=pending.length;document.getElementById('testCount').textContent=tests.filter(t=>t.date>=todayISO()).length;document.getElementById('overdueCount').textContent=late.length;document.getElementById('doneCount').textContent=done.length;const pct=hw.length?Math.round(done.length/hw.length*100):0;document.getElementById('progressBar').style.width=pct+'%';document.getElementById('progressText').textContent=`${pct}% completed · ${done.length} of ${hw.length} tasks`;const priority=[...late,...pending.filter(t=>!isLate(t)).sort((a,b)=>a.date.localeCompare(b.date))].slice(0,5);fillList('priorityList',priority,'homework','No pending tasks. Add your first assignment.');let filtered=hw;const f=document.getElementById('homeworkFilter').value;if(f==='pending')filtered=hw.filter(t=>t.status!=='done');if(f==='done')filtered=done;if(f==='overdue')filtered=late;fillList('homeworkList',[...filtered].sort((a,b)=>a.date.localeCompare(b.date)),'homework','No assignments in this view.');fillList('missingList',[...late].sort((a,b)=>a.date.localeCompare(b.date)),'homework','No overdue assignments. Nice work!');fillList('testList',[...tests].sort((a,b)=>a.date.localeCompare(b.date)),'test','No tests added yet.');const upcomingTests=[...tests].filter(t=>t.date>=todayISO()).sort((a,b)=>a.date.localeCompare(b.date));const upcomingReminders=[...data.reminders].filter(r=>!r.done&&new Date(r.when)>=new Date()).sort((a,b)=>a.when.localeCompare(b.when));let messages=[];if(upcomingTests.length){const t=upcomingTests[0];const day=new Date(t.date+'T00:00:00').toLocaleDateString(undefined,{weekday:'long'});const when=daysUntil(t.date)===0?'today':daysUntil(t.date)===1?'tomorrow':`on ${day}, ${niceDate(t.date)}`;messages.push(`Your next ${t.subject} exam${t.name?` (${t.name})`:''} is ${when}.`)}if(late.length)messages.push(`You also have ${late.length} overdue assignment${late.length===1?'':'s'} to review.`);else if(pending.length){const first=[...pending].sort((a,b)=>a.date.localeCompare(b.date))[0];messages.push(`Your next homework deadline is ${first.subject} on ${niceDate(first.date)}.`)}if(upcomingReminders.length)messages.push(`Reminder: ${upcomingReminders[0].title} — ${niceDate(upcomingReminders[0].when)}.`);document.getElementById('briefing').textContent=messages.length?messages.join(' '):'You are all caught up for now. Add a task, test or reminder whenever you need to.'}
+function toggleHomework(itemId){const t=data.homework.find(x=>x.id===itemId);if(t){t.status=t.status==='done'?'pending':'done';saveData();render()}}
+function setHomeworkStatus(itemId,status){const t=data.homework.find(x=>x.id===itemId);if(t&&['pending','done'].includes(status)){t.status=status;saveData();render()}}
+function deleteItem(type,itemId){if(!confirm('Delete this entry?'))return;const key=type==='test'?'tests':type==='homework'?'homework':type;data[key]=data[key].filter(x=>x.id!==itemId);saveData();render()}
+function formObject(form){return Object.fromEntries(new FormData(form).entries())}
+document.getElementById('homeworkForm').addEventListener('submit',e=>{e.preventDefault();const v=formObject(e.target);data.homework.push({id:id(),...v,status:'pending'});saveData();e.target.reset();render()});
+document.getElementById('testForm').addEventListener('submit',e=>{e.preventDefault();const v=formObject(e.target);data.tests.push({id:id(),...v,status:'scheduled'});saveData();e.target.reset();render()});
+document.getElementById('homeworkFilter').addEventListener('change',renderTasks);
+function noteCard(n,type){const body=type==='notes'?cleanNoteHTML(n.body||''):esc(n.body||'');return `<article class="note-card"><div class="eyebrow">${esc(n.category||'')}</div><h4>${esc(n.title)}</h4><div class="task-meta">${niceDate(n.created)}</div><div class="note-body">${body}</div><div class="card-actions"><button class="btn danger" onclick="deleteItem('${type}','${n.id}')">Delete</button></div></article>`}
+function cleanNoteHTML(html){html=String(html).replace(/\u200B/g,'');const parsed=new DOMParser().parseFromString(String(html),'text/html');const allowed=new Set(['P','BR','STRONG','B','EM','I','U','SPAN','UL','OL','LI','DIV']);function clean(node){if(node.nodeType===Node.TEXT_NODE)return document.createTextNode(node.nodeValue);if(node.nodeType!==Node.ELEMENT_NODE)return document.createDocumentFragment();if(!allowed.has(node.tagName)){const fragment=document.createDocumentFragment();[...node.childNodes].forEach(child=>fragment.appendChild(clean(child)));return fragment}const el=document.createElement(node.tagName.toLowerCase());if(node.tagName==='SPAN'){const size=node.style.fontSize;if(['12px','14px','16px','18px','22px','26px'].includes(size))el.style.fontSize=size}[...node.childNodes].forEach(child=>el.appendChild(clean(child)));return el}const out=document.createElement('div');[...parsed.body.childNodes].forEach(node=>out.appendChild(clean(node)));return out.innerHTML}
+const noteEditor=document.getElementById('noteEditor');
+document.querySelectorAll('.editor-toolbar [data-command]').forEach(button=>{button.addEventListener('mousedown',e=>e.preventDefault());button.addEventListener('click',()=>{noteEditor.focus();document.execCommand(button.dataset.command,false,null)})});
+let savedNoteRange=null;
+function rememberNoteSelection(){const selection=window.getSelection();if(!selection||!selection.rangeCount)return;const range=selection.getRangeAt(0);if(noteEditor.contains(range.commonAncestorContainer))savedNoteRange=range.cloneRange()}
+noteEditor.addEventListener('keyup',rememberNoteSelection);noteEditor.addEventListener('mouseup',rememberNoteSelection);noteEditor.addEventListener('input',rememberNoteSelection);
+document.getElementById('noteFontSize').addEventListener('mousedown',rememberNoteSelection);
+document.getElementById('noteFontSize').addEventListener('change',e=>{
+  const size=`${e.target.value}px`;noteEditor.focus();
+  const selection=window.getSelection();let range=null;
+  if(savedNoteRange){range=savedNoteRange.cloneRange()}else if(selection&&selection.rangeCount){range=selection.getRangeAt(0).cloneRange()}
+  if(!range||!noteEditor.contains(range.commonAncestorContainer)){range=document.createRange();range.selectNodeContents(noteEditor);range.collapse(false)}
+  selection.removeAllRanges();selection.addRange(range);
+  if(!range.collapsed){
+    const span=document.createElement('span');span.style.fontSize=size;
+    span.appendChild(range.extractContents());range.insertNode(span);
+    const updated=document.createRange();updated.selectNodeContents(span);selection.removeAllRanges();selection.addRange(updated);savedNoteRange=updated.cloneRange();
+  }else{
+    const span=document.createElement('span');span.style.fontSize=size;span.appendChild(document.createTextNode('\u200B'));range.insertNode(span);
+    const textNode=span.firstChild;const caret=document.createRange();caret.setStart(textNode,1);caret.collapse(true);selection.removeAllRanges();selection.addRange(caret);savedNoteRange=caret.cloneRange();
+  }
+  noteEditor.focus();
+});
+document.getElementById('noteForm').addEventListener('submit',e=>{e.preventDefault();const title=e.target.elements.title.value.trim();const category=e.target.elements.category.value;const body=cleanNoteHTML(noteEditor.innerHTML);if(!title||!noteEditor.innerText.trim()){alert('Please add a title and some note text.');return}data.notes.unshift({id:id(),title,category,body,created:new Date().toISOString()});saveData();e.target.reset();noteEditor.innerHTML='';renderNotes()});
+function renderNotes(){const q=document.getElementById('noteSearch').value.toLowerCase();const items=data.notes.filter(n=>(n.title+' '+n.category+' '+n.body).toLowerCase().includes(q));document.getElementById('noteList').innerHTML=items.length?items.map(n=>noteCard(n,'notes')).join(''):'<div class="empty full">No notes found. Create your first note.</div>';document.getElementById('dashboardNotes').innerHTML=lockedSections.includes('notes')?'<div class="empty" style="letter-spacing:2px;font-weight:800;color:var(--rose)">LOCKED · CONTENT HIDDEN</div>':(data.notes.slice(0,2).map(n=>`<div class="entry"><div class="entry-main"><div class="entry-title">${esc(n.title)}</div><div class="entry-meta">${esc(n.category)}</div></div></div>`).join('')||'<div class="empty">No saved notes yet.</div>')}
+document.getElementById('noteSearch').addEventListener('input',renderNotes);
+document.getElementById('ideaForm').addEventListener('submit',e=>{e.preventDefault();const v=formObject(e.target);data.ideas.unshift({id:id(),...v,created:new Date().toISOString()});saveData();e.target.reset();renderIdeas()});
+function renderIdeas(){document.getElementById('ideaList').innerHTML=data.ideas.length?data.ideas.map(i=>`<article class="note-card"><div class="eyebrow">${esc(i.category)} · ${esc(i.status)}</div><h4>${esc(i.title)}</h4><div class="task-meta">${niceDate(i.created)}</div><p>${esc(i.body||'No extra details.')}</p><div class="card-actions"><button class="btn secondary" onclick="cycleIdea('${i.id}')">Change status</button><button class="btn danger" onclick="deleteItem('ideas','${i.id}')">Delete</button></div></article>`).join(''):'<div class="empty full">No ideas saved yet. Capture one whenever inspiration strikes.</div>'}
+function cycleIdea(itemId){const i=data.ideas.find(x=>x.id===itemId);if(i){const states=['Developing','Someday','Completed'];i.status=states[(states.indexOf(i.status)+1)%states.length];saveData();renderIdeas()}}
+document.getElementById('reminderForm').addEventListener('submit',e=>{e.preventDefault();const v=formObject(e.target);data.reminders.push({id:id(),...v,done:false});saveData();e.target.reset();renderReminders()});
+function reminderHTML(r){return `<div class="entry"><input class="check" type="checkbox" ${r.done?'checked':''} onchange="toggleReminder('${r.id}')"><div class="entry-main"><div class="entry-title" style="${r.done?'text-decoration:line-through;opacity:.6':''}">${esc(r.title)}</div><div class="entry-meta">${niceDate(r.when)} · ${esc(r.priority)}${r.details?' · '+esc(r.details):''}</div></div><button class="btn danger" onclick="deleteItem('reminders','${r.id}')">×</button></div>`}
+function renderReminders(){const sorted=[...data.reminders].sort((a,b)=>a.when.localeCompare(b.when));document.getElementById('reminderList').innerHTML=sorted.length?sorted.map(reminderHTML).join(''):'<div class="empty">No reminders yet.</div>';const upcoming=sorted.filter(r=>!r.done).slice(0,3);document.getElementById('dashboardReminders').innerHTML=upcoming.length?upcoming.map(r=>`<div class="entry"><div class="entry-main"><div class="entry-title">${esc(r.title)}</div><div class="entry-meta">${niceDate(r.when)} · ${esc(r.priority)}</div></div></div>`).join(''):'<div class="empty">No upcoming reminders.</div>'}
+function toggleReminder(itemId){const r=data.reminders.find(x=>x.id===itemId);if(r){r.done=!r.done;saveData();renderReminders()}}
+document.getElementById('moodChoices').addEventListener('click',e=>{const b=e.target.closest('[data-mood]');if(!b)return;selectedMood=b.dataset.mood;updateMoodChoices()});
+function updateMoodChoices(){document.querySelectorAll('.mood-choice').forEach(b=>b.classList.toggle('selected',b.dataset.mood===selectedMood))}
+function renderMoods(){const today=data.moods.find(m=>m.date===todayISO());document.getElementById('moodToday').textContent=today?'TODAY SAVED':'TODAY NOT SAVED';if(today){selectedMood=today.mood;document.getElementById('moodNote').value=today.note||''}else{selectedMood='Good';document.getElementById('moodNote').value=''}updateMoodChoices();const sorted=[...data.moods].sort((a,b)=>b.date.localeCompare(a.date));document.getElementById('moodCount').textContent=sorted.length+' entr'+(sorted.length===1?'y':'ies');document.getElementById('moodHistory').innerHTML=sorted.length?sorted.map(m=>`<article class="mood-entry"><div class="mood-entry-head"><strong>${esc(m.emoji)} ${esc(m.mood)}</strong><span class="tag">${niceDate(m.date)}</span></div>${m.note?`<p>${esc(m.note)}</p>`:'<p class="muted">No notes added for this day.</p>'}<div class="card-actions"><button class="btn danger" onclick="deleteMood('${m.id}')">Delete entry</button></div></article>`).join(''):'<div class="empty">Your daily entries will appear here.</div>'}
+document.getElementById('moodForm').addEventListener('submit',e=>{e.preventDefault();const emojis={Amazing:'🤩',Good:'😊',Okay:'😐',Low:'😔',Stressed:'😣',Tired:'😴'};const entry={id:id(),date:todayISO(),mood:selectedMood,emoji:emojis[selectedMood],note:document.getElementById('moodNote').value.trim()};const index=data.moods.findIndex(m=>m.date===todayISO());if(index>=0)data.moods[index]=entry;else data.moods.push(entry);saveData();renderMoods();alert("Today's mood journal entry has been saved.")});
+function deleteMood(itemId){if(!confirm('Delete this mood journal entry?'))return;data.moods=data.moods.filter(m=>m.id!==itemId);saveData();renderMoods()}
+
+let editingSleepId=null;
+function resetSleepForm(){editingSleepId=null;document.getElementById('sleepDate').value=todayISO();document.getElementById('sleepHours').value='';document.getElementById('sleepFormStatus').textContent='DAILY CHECK-IN';document.getElementById('cancelSleepEdit').hidden=true}
+function renderSleepChart(entries){
+  const host=document.getElementById('sleepChart');
+  if(!entries.length){host.innerHTML='<div class="empty">Your line graph will appear once you add sleep entries.</div>';return}
+  const shown=entries.slice(-14), W=620,H=230,L=48,R=18,T=24,B=42,plotW=W-L-R,plotH=H-T-B;
+  const values=shown.map(e=>Number(e.hours)),minVal=Math.max(0,Math.floor(Math.min(...values)-1)),maxVal=Math.min(24,Math.max(Math.ceil(Math.max(...values)+1),minVal+2));
+  const x=i=>L+(shown.length===1?plotW/2:i*plotW/(shown.length-1));
+  const y=v=>T+(maxVal-v)/(maxVal-minVal)*plotH;
+  let grid='';
+  for(let v=minVal;v<=maxVal;v+=Math.max(1,Math.ceil((maxVal-minVal)/4))){grid+=`<line class="gridline" x1="${L}" y1="${y(v)}" x2="${W-R}" y2="${y(v)}"/><text class="axis-label" x="${L-9}" y="${y(v)+4}" text-anchor="end">${v}h</text>`}
+  const pts=shown.map((e,i)=>`${x(i)},${y(Number(e.hours))}`).join(' ');
+  const dots=shown.map((e,i)=>`<circle class="sleep-point" cx="${x(i)}" cy="${y(Number(e.hours))}" r="5"><title>${niceDate(e.date)}: ${Number(e.hours)} hours</title></circle><text class="point-label" x="${x(i)}" y="${y(Number(e.hours))-11}" text-anchor="middle">${Number(e.hours)}h</text>`).join('');
+  const labels=shown.map((e,i)=>`<text class="axis-label" x="${x(i)}" y="${H-13}" text-anchor="middle">${new Date(e.date+'T00:00:00').toLocaleDateString(undefined,{day:'numeric',month:'short'})}</text>`).join('');
+  host.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Line graph of sleep hours by date">${grid}<polyline class="sleep-line" points="${pts}"/>${dots}${labels}</svg>`;
+  document.getElementById('sleepChartCaption').textContent=shown.length===1?'1 recorded night':'Last '+shown.length+' recorded nights';
+}
+function renderHealth(){
+  const sorted=[...data.health].sort((a,b)=>a.date.localeCompare(b.date));
+  const latest=sorted[sorted.length-1],average=sorted.length?sorted.reduce((sum,e)=>sum+Number(e.hours),0)/sorted.length:0;
+  document.getElementById('sleepToday').textContent=new Date().toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'long'});
+  document.getElementById('sleepAverage').textContent=sorted.length?average.toFixed(1)+'h':'—';
+  document.getElementById('sleepLatest').textContent=latest?Number(latest.hours)+'h':'—';
+  document.getElementById('sleepDays').textContent=sorted.length;
+  const trend=sorted.length>1?Number(latest.hours)-Number(sorted[sorted.length-2].hours):null;
+  document.getElementById('sleepTrend').textContent=trend===null?'—':(trend>0?'+':'')+trend.toFixed(1)+'h';
+  renderSleepChart(sorted);
+  const newest=[...sorted].reverse();
+  document.getElementById('sleepCount').textContent=newest.length+' entr'+(newest.length===1?'y':'ies');
+  document.getElementById('sleepHistory').innerHTML=newest.length?newest.map(e=>`<article class="entry"><div class="entry-main"><div class="entry-title">${Number(e.hours)} hours</div><div class="entry-meta">${niceDate(e.date)}</div></div><button class="btn secondary" onclick="editSleep('${e.id}')">Edit</button><button class="btn danger" onclick="deleteSleep('${e.id}')">×</button></article>`).join(''):'<div class="empty">No sleep entries yet. Add your first check-in above.</div>';
+}
+document.getElementById('sleepDate').value=todayISO();
+document.getElementById('sleepForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const date=document.getElementById('sleepDate').value,hours=Number(document.getElementById('sleepHours').value);
+  if(!date||!Number.isFinite(hours)||hours<0||hours>24){alert('Please enter a valid date and a number of hours between 0 and 24.');return}
+  const existing=data.health.findIndex(item=>item.date===date);
+  const entry={id:editingSleepId||(existing>=0?data.health[existing].id:id()),date,hours};
+  if(existing>=0)data.health[existing]=entry;else data.health.push(entry);
+  saveData();resetSleepForm();renderHealth();
+});
+function editSleep(itemId){const entry=data.health.find(e=>e.id===itemId);if(!entry)return;editingSleepId=itemId;document.getElementById('sleepDate').value=entry.date;document.getElementById('sleepHours').value=entry.hours;document.getElementById('sleepFormStatus').textContent='EDITING ENTRY';document.getElementById('cancelSleepEdit').hidden=false;document.getElementById('sleepForm').scrollIntoView({behavior:'smooth',block:'center'})}
+function deleteSleep(itemId){if(!confirm('Delete this sleep entry?'))return;data.health=data.health.filter(e=>e.id!==itemId);saveData();renderHealth();if(editingSleepId===itemId)resetSleepForm()}
+document.getElementById('cancelSleepEdit').addEventListener('click',resetSleepForm);
+
+
+// CUSTOM SHORTCUTS: every shortcut is user-created and stored locally.
+const CUSTOM_SHORTCUTS_KEY='april-custom-shortcuts-v1';
+let editingShortcutId=null;
+function loadCustomShortcuts(){
+ try{const items=JSON.parse(localStorage.getItem(CUSTOM_SHORTCUTS_KEY)||'[]');return Array.isArray(items)?items:[]}
+ catch(error){return []}
+}
+function saveCustomShortcuts(items){
+ try{localStorage.setItem(CUSTOM_SHORTCUTS_KEY,JSON.stringify(items));return true}
+ catch(error){alert('APRIL could not save your shortcuts in this browser.');return false}
+}
+function renderShortcuts(){
+ const host=document.getElementById('customShortcutGrid');
+ if(!host)return;
+ const items=loadCustomShortcuts();
+ host.innerHTML=items.length?items.map(item=>`<a class="shortcut-card custom-shortcut-card" data-shortcut-id="${esc(item.id)}" href="${esc(item.url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(item.name)}. Right-click or press and hold to edit or remove"><span class="shortcut-icon">${esc((item.name||'↗').slice(0,2).toUpperCase())}</span><span class="shortcut-name">${esc(item.name)}</span><span class="shortcut-desc">${esc(item.url.replace(/^https?:\/\//,''))}</span><span class="shortcut-open">OPEN ↗</span></a>`).join(''):'<div class="empty" style="grid-column:1/-1">No shortcuts yet. Add your first website.</div>';
+}
+const addShortcutBtn=document.getElementById('addShortcutBtn');
+const customShortcutForm=document.getElementById('customShortcutForm');
+const shortcutNameInput=document.getElementById('customShortcutName');
+const shortcutUrlInput=document.getElementById('customShortcutUrl');
+const shortcutContextMenu=document.getElementById('shortcutContextMenu');
+let shortcutMenuTargetId=null;
+function hideShortcutMenu(){shortcutContextMenu.hidden=true;shortcutMenuTargetId=null}
+function openShortcutMenu(card,x,y){
+ if(!card)return;
+ shortcutMenuTargetId=card.dataset.shortcutId;
+ shortcutContextMenu.hidden=false;
+ const menuWidth=170,menuHeight=92;
+ shortcutContextMenu.style.left=Math.max(8,Math.min(x,window.innerWidth-menuWidth-8))+'px';
+ shortcutContextMenu.style.top=Math.max(8,Math.min(y,window.innerHeight-menuHeight-8))+'px';
+}
+function resetShortcutForm(){
+ customShortcutForm.reset();
+ editingShortcutId=null;
+ document.getElementById('saveShortcutBtn').textContent='Save shortcut';
+ customShortcutForm.hidden=true;
+}
+function beginShortcutEdit(shortcutId){
+ const item=loadCustomShortcuts().find(entry=>entry.id===shortcutId);
+ if(!item)return;
+ editingShortcutId=shortcutId;
+ shortcutNameInput.value=item.name;
+ shortcutUrlInput.value=item.url;
+ document.getElementById('saveShortcutBtn').textContent='Save changes';
+ customShortcutForm.hidden=false;
+ hideShortcutMenu();
+ customShortcutForm.scrollIntoView({behavior:'smooth',block:'center'});
+ shortcutNameInput.focus();
+}
+addShortcutBtn.addEventListener('click',()=>{
+ if(!customShortcutForm.hidden&&!editingShortcutId){customShortcutForm.hidden=true;return}
+ resetShortcutForm();
+ customShortcutForm.hidden=false;
+ shortcutNameInput.focus();
+});
+document.getElementById('cancelShortcutBtn').addEventListener('click',()=>{
+ resetShortcutForm();
+});
+customShortcutForm.addEventListener('submit',event=>{
+ event.preventDefault();
+ const name=shortcutNameInput.value.trim();
+ const rawUrl=shortcutUrlInput.value.trim();
+ if(!name||!rawUrl)return;
+ try{
+   const url=new URL(rawUrl);
+   if(!['http:','https:'].includes(url.protocol))throw new Error('Unsupported URL');
+   const items=loadCustomShortcuts();
+   if(editingShortcutId){
+     const index=items.findIndex(item=>item.id===editingShortcutId);
+     if(index<0)throw new Error('Shortcut no longer exists');
+     items[index]={...items[index],name,url:url.href};
+   }else{
+     items.push({id:id(),name,url:url.href});
+   }
+   if(saveCustomShortcuts(items)){resetShortcutForm();renderShortcuts()}
+ }catch(error){alert('Please enter a valid website address beginning with https:// or http://')}
+});
+function removeCustomShortcut(shortcutId){
+ const items=loadCustomShortcuts();
+ const item=items.find(entry=>entry.id===shortcutId);
+ if(!item)return;
+ if(confirm(`Remove "${item.name}" from your shortcuts?`)){
+   if(saveCustomShortcuts(items.filter(entry=>entry.id!==shortcutId))){
+     if(editingShortcutId===shortcutId)resetShortcutForm();
+     renderShortcuts();
+   }
+ }
+ hideShortcutMenu();
+}
+const customShortcutGrid=document.getElementById('customShortcutGrid');
+let shortcutPressTimer=null,shortcutLongPressed=false;
+customShortcutGrid.addEventListener('contextmenu',event=>{
+ const card=event.target.closest('.custom-shortcut-card');
+ if(!card)return;
+ event.preventDefault();
+ openShortcutMenu(card,event.clientX,event.clientY);
+});
+customShortcutGrid.addEventListener('touchstart',event=>{
+ const card=event.target.closest('.custom-shortcut-card');
+ if(!card)return;
+ shortcutLongPressed=false;
+ shortcutPressTimer=setTimeout(()=>{
+   shortcutLongPressed=true;
+   const touch=event.touches&&event.touches[0];
+   if(touch)openShortcutMenu(card,touch.clientX,touch.clientY);
+ },600);
+},{passive:true});
+['touchend','touchcancel','touchmove'].forEach(type=>customShortcutGrid.addEventListener(type,()=>{
+ if(shortcutPressTimer){clearTimeout(shortcutPressTimer);shortcutPressTimer=null}
+}));
+customShortcutGrid.addEventListener('click',event=>{
+ if(shortcutLongPressed){event.preventDefault();event.stopPropagation();shortcutLongPressed=false}
+});
+shortcutContextMenu.addEventListener('click',event=>{
+ const action=event.target.closest('button')?.dataset.action;
+ if(!action||!shortcutMenuTargetId)return;
+ const target=shortcutMenuTargetId;
+ hideShortcutMenu();
+ if(action==='edit')beginShortcutEdit(target);
+ if(action==='remove')removeCustomShortcut(target);
+});
+document.addEventListener('click',event=>{
+ if(!shortcutContextMenu.hidden&&!event.target.closest('#shortcutContextMenu'))hideShortcutMenu();
+});
+document.addEventListener('keydown',event=>{if(event.key==='Escape')hideShortcutMenu()});
+window.addEventListener('resize',hideShortcutMenu);
+
+// Refresh all visible data from saved browser storage without deleting or recreating it.
+function refreshDashboard(){
+ try{
+   data=loadData();
+   todoCycleCheck();
+   render();
+   updateOverviewLockStatus();
+   const today=document.getElementById('today');
+   if(today)today.textContent=new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
+   const button=document.getElementById('refreshOverviewBtn');
+   if(button){const previous=button.textContent;button.textContent='✓ Updated';setTimeout(()=>button.textContent=previous,1200)}
+ }catch(error){
+   console.error('APRIL refresh failed:',error);
+   alert('APRIL could not refresh the dashboard. Your saved information has not been intentionally changed.');
+ }
+}
+document.getElementById('refreshOverviewBtn').addEventListener('click',refreshDashboard);
+
+// DAILY TO-DO: automatically clear the checklist 24 hours after its cycle begins.
+const TODO_RESET_KEY='april-daily-todo-reset-at';
+function todoCycleCheck(){
+ const now=Date.now();
+ let started=Number(data.dailyTodoCycleStartedAt||0);
+ if(!started){
+   // Migrate the timestamp created by the earlier build if it exists.
+   try{started=Number(localStorage.getItem(TODO_RESET_KEY)||0)}catch(error){started=0}
+ }
+ if(!started||!Number.isFinite(started)||now-started>=24*60*60*1000){
+   data.dailyTodos=[];
+   started=now;
+ }
+ data.dailyTodoCycleStartedAt=started;
+ saveData();
+ return started;
+}
+function renderTodo(){
+ const started=todoCycleCheck(),remaining=Math.max(0,24*60*60*1000-(Date.now()-started));
+ const hours=Math.floor(remaining/3600000),minutes=Math.floor((remaining%3600000)/60000);
+ const countdown=document.getElementById('todoCountdown'),label=document.getElementById('todoResetLabel');
+ if(countdown)countdown.textContent=`Resets in ${hours}h ${minutes}m`;
+ if(label)label.textContent='Next reset in '+hours+'h '+minutes+'m';
+ const done=data.dailyTodos.filter(t=>t.done).length;
+ document.getElementById('todoProgress').textContent=`${done} / ${data.dailyTodos.length} completed`;
+ document.getElementById('todoList').innerHTML=data.dailyTodos.length?data.dailyTodos.map(t=>`<div class="entry todo-entry"><input class="check" type="checkbox" ${t.done?'checked':''} onchange="toggleTodo('${t.id}')"><div class="entry-main"><div class="entry-title ${t.done?'todo-done':''}">${esc(t.title)}</div><div class="entry-meta">${t.time?'Planned for '+esc(t.time):'Today'}</div></div><button class="btn danger" onclick="deleteTodo('${t.id}')" aria-label="Delete task">×</button></div>`).join(''):'<div class="empty">Your list is clear. Add something you would like to do today.</div>';
+}
+function toggleTodo(itemId){const item=data.dailyTodos.find(t=>t.id===itemId);if(item){item.done=!item.done;saveData();renderTodo()}}
+function deleteTodo(itemId){data.dailyTodos=data.dailyTodos.filter(t=>t.id!==itemId);saveData();renderTodo()}
+document.getElementById('todoForm').addEventListener('submit',e=>{
+ e.preventDefault();todoCycleCheck();
+ const v=formObject(e.target);
+ data.dailyTodos.push({id:id(),title:v.title.trim(),time:v.time||'',done:false});
+ saveData();e.target.reset();renderTodo();
+});
+
+// MONEY: totals are grouped by the user's own currency label; no exchange rates assumed.
+function moneyMonthKey(date){return String(date||'').slice(0,7)}
+function moneyFormat(amount,currency){
+ const value=Number(amount)||0;
+ return `${currency} ${value.toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:2})}`;
+}
+function groupMoney(items){
+ const groups={};
+ items.forEach(item=>{
+   const currency=(item.currency||'IDR').trim().toUpperCase()||'IDR';
+   groups[currency]=(groups[currency]||0)+Number(item.amount||0);
+ });
+ return groups;
+}
+
+function renderSpendingChart(monthPurchases){
+ const host=document.getElementById('spendingChart');
+ if(!host)return;
+ if(!monthPurchases.length){host.innerHTML='<div class="empty">Your spending graph will appear after you record purchases.</div>';return}
+ const daysInMonth=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate();
+ const grouped={};
+ monthPurchases.forEach(p=>{
+   const currency=(p.currency||'IDR').trim().toUpperCase()||'IDR';
+   const day=Number(String(p.date||'').slice(8,10));
+   if(day>=1&&day<=daysInMonth){
+     if(!grouped[currency])grouped[currency]=Array(daysInMonth).fill(0);
+     grouped[currency][day-1]+=Number(p.amount||0);
+   }
+ });
+ host.innerHTML=Object.entries(grouped).map(([currency,values])=>{
+   const width=620,height=210,left=54,right=16,top=18,bottom=34;
+   const plotW=width-left-right,plotH=height-top-bottom;
+   const max=Math.max(...values,1);
+   const niceMax=max*1.12;
+   const x=i=>left+(i/(Math.max(daysInMonth-1,1)))*plotW;
+   const y=v=>top+plotH-(v/niceMax)*plotH;
+   const points=values.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+   const yTicks=[0,.25,.5,.75,1].map(f=>{
+     const val=niceMax*f,yy=y(val);
+     return `<line x1="${left}" y1="${yy}" x2="${width-right}" y2="${yy}" class="chart-gridline"/><text x="${left-8}" y="${yy+4}" text-anchor="end" class="chart-axis-label">${esc(Math.round(val).toLocaleString())}</text>`;
+   }).join('');
+   const xTicks=Array.from({length:Math.ceil(daysInMonth/5)},(_,i)=>Math.min(1+i*5,daysInMonth)).filter((v,i,a)=>a.indexOf(v)===i).map(day=>`<text x="${x(day-1)}" y="${height-8}" text-anchor="middle" class="chart-axis-label">${day}</text>`).join('');
+   const dots=values.map((v,i)=>v>0?`<circle cx="${x(i)}" cy="${y(v)}" r="3.2" class="chart-dot"><title>${dayLabel(i+1)}: ${esc(moneyFormat(v,currency))}</title></circle>`:'').join('');
+   return `<div class="chart-currency"><div class="chart-currency-title">${esc(currency)} · daily spending</div><svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Daily spending in ${esc(currency)} for this month">${yTicks}${xTicks}<polyline points="${points}" class="spending-line"/>${dots}</svg></div>`;
+ }).join('');
+}
+function dayLabel(day){return new Date(new Date().getFullYear(),new Date().getMonth(),day).toLocaleDateString(undefined,{day:'numeric',month:'short'})}
+
+function renderMoney(){
+ const month=todayISO().slice(0,7);
+ const monthPurchases=data.purchases.filter(p=>moneyMonthKey(p.date)===month);
+ const spending=groupMoney(monthPurchases),wishTotals=groupMoney(data.wishlist);
+ renderSpendingChart(monthPurchases);
+ document.getElementById('moneyMonthLabel').textContent=new Date().toLocaleDateString(undefined,{month:'long',year:'numeric'}).toUpperCase();
+ document.getElementById('purchaseCount').textContent=monthPurchases.length;
+ document.getElementById('currencyCount').textContent=Object.keys(spending).length;
+ document.getElementById('wishlistCount').textContent=data.wishlist.length;
+ document.getElementById('wishlistCurrencies').textContent=Object.keys(wishTotals).length?Object.entries(wishTotals).map(([currency,total])=>moneyFormat(total,currency)).join(' · '):'—';
+ const spendingEl=document.getElementById('spendingTotals');
+ spendingEl.innerHTML=Object.keys(spending).length?Object.entries(spending).map(([currency,total])=>`<div class="entry"><div class="entry-main"><div class="entry-title">${esc(currency)}</div><div class="entry-meta">Total spent this month</div></div><strong>${moneyFormat(total,currency)}</strong></div>`).join(''):'<div class="empty">No purchases recorded this month yet.</div>';
+ const categories={};
+ monthPurchases.forEach(p=>{
+   const currency=(p.currency||'IDR').trim().toUpperCase()||'IDR',category=p.category||'Other',key=currency+'|||'+category;
+   categories[key]=(categories[key]||0)+Number(p.amount||0);
+ });
+ const catRows=Object.entries(categories).sort((a,b)=>a[0].localeCompare(b[0]));
+ document.getElementById('categoryTotals').innerHTML=catRows.length?'<div class="eyebrow" style="margin:8px 0">CATEGORY BREAKDOWN</div>'+catRows.map(([key,total])=>{const [currency,category]=key.split('|||');return `<div class="entry"><div class="entry-main"><div class="entry-title">${esc(category)}</div><div class="entry-meta">${esc(currency)}</div></div><strong>${moneyFormat(total,currency)}</strong></div>`}).join(''):'';
+ const sorted=[...monthPurchases].sort((a,b)=>b.date.localeCompare(a.date));
+ document.getElementById('purchaseList').innerHTML=sorted.length?sorted.map(p=>`<div class="entry"><div class="entry-main"><div class="entry-title">${esc(p.name)}</div><div class="entry-meta">${esc(p.category||'Other')} · ${niceDate(p.date)}</div></div><strong>${moneyFormat(p.amount,p.currency)}</strong><button class="btn danger" onclick="deletePurchase('${p.id}')" aria-label="Delete purchase">×</button></div>`).join(''):'<div class="empty">No purchases recorded this month.</div>';
+ document.getElementById('wishlistList').innerHTML=data.wishlist.length?data.wishlist.map(w=>`<div class="entry"><div class="entry-main"><div class="entry-title">${esc(w.name)}</div><div class="entry-meta">${esc(w.category||'Other')}</div></div><strong>${moneyFormat(w.amount,w.currency)}</strong><button class="btn danger" onclick="deleteWish('${w.id}')" aria-label="Delete wishlist item">×</button></div>`).join(''):'<div class="empty">Your wishlist is empty. Add something you would like to save for.</div>';
+}
+function deletePurchase(itemId){data.purchases=data.purchases.filter(p=>p.id!==itemId);saveData();renderMoney()}
+function deleteWish(itemId){data.wishlist=data.wishlist.filter(w=>w.id!==itemId);saveData();renderMoney()}
+// Parse money input without treating a thousands separator as a decimal point.
+// Examples: 50,000 -> 50000; 50.000 -> 50000; 12.50 -> 12.5; 1,250.75 -> 1250.75.
+function parseMoneyInput(raw){
+ let value=String(raw??'').trim().replace(/\s/g,'').replace(/[^\d.,+-]/g,'');
+ if(!value||!/[0-9]/.test(value))return NaN;
+ const lastComma=value.lastIndexOf(','),lastDot=value.lastIndexOf('.');
+ if(lastComma>=0&&lastDot>=0){
+   const decimalPos=Math.max(lastComma,lastDot);
+   const decimals=value.length-decimalPos-1;
+   const decimalSeparator=decimals>0&&decimals<=2?value[decimalPos]:'';
+   if(decimalSeparator){
+     const integerPart=value.slice(0,decimalPos).replace(/[.,]/g,'');
+     const decimalPart=value.slice(decimalPos+1).replace(/[.,]/g,'');
+     value=integerPart+'.'+decimalPart;
+   }else value=value.replace(/[.,]/g,'');
+ }else if(lastComma>=0||lastDot>=0){
+   const separator=lastComma>=0?',':'.';
+   const parts=value.split(separator);
+   const trailing=parts[parts.length-1];
+   if(parts.length>2||trailing.length===3){
+     value=parts.join('');
+   }else if(trailing.length===1||trailing.length===2){
+     value=parts.slice(0,-1).join('')+'.'+trailing;
+   }else{
+     value=parts.join('');
+   }
+ }
+ const parsed=Number(value);
+ return Number.isFinite(parsed)?parsed:NaN;
+}
+document.getElementById('purchaseForm').addEventListener('submit',e=>{
+ e.preventDefault();const v=formObject(e.target),amount=parseMoneyInput(v.amount),currency=v.currency.trim().toUpperCase();
+ if(!Number.isFinite(amount)||amount<=0||!currency){alert('Please enter a valid amount and currency.');return}
+ data.purchases.push({id:id(),name:v.name.trim(),amount,currency,category:v.category,date:v.date||todayISO()});
+ saveData();e.target.reset();document.getElementById('purchaseCurrency').value='IDR';document.getElementById('purchaseDate').value=todayISO();renderMoney();
+});
+document.getElementById('wishlistForm').addEventListener('submit',e=>{
+ e.preventDefault();const v=formObject(e.target),amount=parseMoneyInput(v.amount),currency=v.currency.trim().toUpperCase();
+ if(!Number.isFinite(amount)||amount<0||!currency){alert('Please enter a valid price and currency.');return}
+ data.wishlist.push({id:id(),name:v.name.trim(),amount,currency,category:v.category});
+ saveData();e.target.reset();document.getElementById('wishCurrency').value='IDR';renderMoney();
+});
+
+function render(){renderTasks();renderNotes();renderIdeas();renderReminders();renderMoods();renderHealth();renderShortcuts();renderTodo();renderMoney()}
+
+updateOverviewLockStatus();
+
+// Initialise every section from saved data immediately on page load.
+document.getElementById('purchaseDate').value=todayISO();
+render();
+const todayLabel=document.getElementById('today');
+if(todayLabel)todayLabel.textContent=new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
+todoCycleCheck();
+renderTodo();
+
+setInterval(()=>{
+ const started=Number(data.dailyTodoCycleStartedAt||0);
+ if(started&&Date.now()-started>=24*60*60*1000){todoCycleCheck();renderTodo()}
+ else if(document.getElementById('todo').classList.contains('active'))renderTodo();
+},60000);
+document.addEventListener('visibilitychange',()=>{
+ if(!document.hidden){
+   const started=Number(data.dailyTodoCycleStartedAt||0);
+   if(started&&Date.now()-started>=24*60*60*1000)todoCycleCheck();
+   renderTodo();
+ }
+});
+</script>
+
+<script>
+(function(){
+  const NAME_KEY='april-user-name';
+  const DEVICE_PASSWORD_HASH_KEY='april-device-password-hash';
+  const DEVICE_PASSWORD_SALT_KEY='april-device-password-salt';
+
+  function savedName(){
+    try{return (localStorage.getItem(NAME_KEY)||'').trim()}
+    catch(error){return ''}
+  }
+  function hasDevicePassword(){
+    try{return !!(localStorage.getItem(DEVICE_PASSWORD_HASH_KEY)&&localStorage.getItem(DEVICE_PASSWORD_SALT_KEY))}
+    catch(error){return false}
+  }
+  function refreshGreeting(){
+    const hour=new Date().getHours();
+    const greeting=hour>=5&&hour<12?'Good morning':hour>=12&&hour<17?'Good afternoon':hour>=17&&hour<21?'Good evening':'Good night';
+    const name=savedName();
+    const heading=document.getElementById('greeting');
+    const subtitle=document.getElementById('welcomeSubtitle');
+    if(heading)heading.textContent=name?greeting+', '+name+'.':greeting+'.';
+    if(subtitle)subtitle.textContent=name
+      ?'Here\'s your academic situation at a glance, '+name+'.'
+      :'Here\'s your academic situation at a glance.';
+  }
+  function showNameEditor(isFirstRun){
+    const layer=document.getElementById('nameWelcome');
+    const input=document.getElementById('userNameInput');
+    const heading=document.getElementById('nameHeading');
+    if(!layer||!input||!heading)return;
+    heading.textContent=isFirstRun?'Before we begin...':'Update your name';
+    input.value=savedName();
+    layer.hidden=false;
+    input.focus();
+    input.select();
+  }
+  function hideNameEditor(){
+    const layer=document.getElementById('nameWelcome');
+    if(layer)layer.hidden=true;
+  }
+  function showDevicePassword(mode){
+    const layer=document.getElementById('devicePasswordLayer');
+    const heading=document.getElementById('devicePasswordHeading');
+    const description=document.getElementById('devicePasswordDescription');
+    const confirmWrap=document.getElementById('devicePasswordConfirmWrap');
+    const input=document.getElementById('devicePasswordInput');
+    const confirm=document.getElementById('devicePasswordConfirm');
+    const submit=document.getElementById('devicePasswordSubmit');
+    document.getElementById('devicePasswordError').textContent='';
+    input.value='';confirm.value='';
+    const creating=mode==='setup';
+    heading.textContent=creating?'Create your device password':'Welcome back to APRIL';
+    description.textContent=creating
+      ?'Choose a password to protect this APRIL installation. It will be saved only in this browser on this device.'
+      :'Enter your device password to unlock your dashboard and load your saved information.';
+    confirmWrap.hidden=!creating;
+    confirm.required=creating;
+    input.autocomplete=creating?'new-password':'current-password';
+    input.placeholder=creating?'At least 6 characters':'Your device password';
+    submit.textContent=creating?'Save device password →':'Unlock APRIL →';
+    layer.dataset.mode=mode;
+    layer.hidden=false;
+    setTimeout(()=>input.focus(),30);
+  }
+  function hideDevicePassword(){
+    const layer=document.getElementById('devicePasswordLayer');
+    if(layer)layer.hidden=true;
+    const input=document.getElementById('devicePasswordInput');
+    const confirm=document.getElementById('devicePasswordConfirm');
+    if(input)input.value='';
+    if(confirm)confirm.value='';
+  }
+  async function digestPassword(password,salt){
+    if(window.crypto&&crypto.subtle){
+      const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(salt+':'+password));
+      return Array.from(new Uint8Array(bytes)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+    // Fallback for browsers that do not expose Web Crypto on local files.
+    let h=2166136261;
+    for(const ch of salt+':'+password){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}
+    return (h>>>0).toString(16);
+  }
+  function makeSalt(){
+    const bytes=new Uint8Array(16);
+    if(window.crypto&&crypto.getRandomValues)crypto.getRandomValues(bytes);
+    else for(let i=0;i<bytes.length;i++)bytes[i]=Math.floor(Math.random()*256);
+    return Array.from(bytes).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  function startInitialSetup(){
+    if(!savedName())showNameEditor(true);
+    else showDevicePassword('setup');
+  }
+  function init(){
+    const nameForm=document.getElementById('nameForm');
+    const edit=document.getElementById('editNameBtn');
+    const nameInput=document.getElementById('userNameInput');
+    const passwordForm=document.getElementById('devicePasswordForm');
+    if(!nameForm||!edit||!nameInput||!passwordForm)return;
+
+    nameForm.onsubmit=function(event){
+      event.preventDefault();
+      const value=nameInput.value.trim();
+      if(!value){nameInput.focus();return false}
+      try{localStorage.setItem(NAME_KEY,value)}
+      catch(error){alert('APRIL could not save your name in this browser. Please check browser storage settings.');return false}
+      hideNameEditor();
+      refreshGreeting();
+      if(!hasDevicePassword())showDevicePassword('setup');
+      return false;
+    };
+    edit.onclick=function(event){
+      event.preventDefault();
+      if(!document.getElementById('devicePasswordLayer').hidden)return;
+      const profileLayer=document.getElementById('profileLayer');
+      document.getElementById('profileNameInput').value=savedName();
+      document.getElementById('profileCurrentPassword').value='';
+      document.getElementById('profileNewPassword').value='';
+      document.getElementById('profileConfirmPassword').value='';
+      document.getElementById('profileError').textContent='';
+      profileLayer.hidden=false;
+      document.getElementById('profileNameInput').focus();
+    };
+    document.getElementById('cancelProfileBtn').onclick=function(){
+      document.getElementById('profileLayer').hidden=true;
+    };
+    document.getElementById('profileForm').onsubmit=async function(event){
+      event.preventDefault();
+      const name=document.getElementById('profileNameInput').value.trim();
+      const current=document.getElementById('profileCurrentPassword').value;
+      const next=document.getElementById('profileNewPassword').value;
+      const confirmNext=document.getElementById('profileConfirmPassword').value;
+      const error=document.getElementById('profileError');
+      if(!name){error.textContent='Please enter a name.';return false}
+      try{
+        if(next||confirmNext||current){
+          if(!current){error.textContent='Enter your current password before changing it.';return false}
+          if(!next||next.length<6){error.textContent='Your new password must be at least 6 characters.';return false}
+          if(next!==confirmNext){error.textContent='The new passwords do not match.';return false}
+          const salt=localStorage.getItem(DEVICE_PASSWORD_SALT_KEY)||'';
+          const expected=localStorage.getItem(DEVICE_PASSWORD_HASH_KEY)||'';
+          const actual=await digestPassword(current,salt);
+          if(!expected||actual!==expected){
+            error.textContent='Your current password is incorrect. No changes were saved.';
+            document.getElementById('profileCurrentPassword').value='';
+            document.getElementById('profileCurrentPassword').focus();
+            return false;
+          }
+          const newSalt=makeSalt();
+          const newHash=await digestPassword(next,newSalt);
+          // Update password hash and salt only after the old password is verified.
+          localStorage.setItem(DEVICE_PASSWORD_SALT_KEY,newSalt);
+          localStorage.setItem(DEVICE_PASSWORD_HASH_KEY,newHash);
+        }
+        localStorage.setItem(NAME_KEY,name);
+        document.getElementById('profileLayer').hidden=true;
+        refreshGreeting();
+      }catch(storageError){
+        error.textContent='APRIL could not save your profile. Please check browser storage settings.';
+      }
+      return false;
+    };
+    passwordForm.onsubmit=async function(event){
+      event.preventDefault();
+      const input=document.getElementById('devicePasswordInput');
+      const confirm=document.getElementById('devicePasswordConfirm');
+      const error=document.getElementById('devicePasswordError');
+      const password=input.value;
+      const mode=document.getElementById('devicePasswordLayer').dataset.mode;
+      if(password.length<6){error.textContent='Please use at least 6 characters.';input.focus();return false}
+      try{
+        if(mode==='setup'){
+          if(password!==confirm.value){error.textContent='The passwords do not match. Please try again.';confirm.value='';confirm.focus();return false}
+          const salt=makeSalt();
+          const hash=await digestPassword(password,salt);
+          localStorage.setItem(DEVICE_PASSWORD_SALT_KEY,salt);
+          localStorage.setItem(DEVICE_PASSWORD_HASH_KEY,hash);
+          hideDevicePassword();
+          refreshGreeting();
+          return false;
+        }
+        const salt=localStorage.getItem(DEVICE_PASSWORD_SALT_KEY)||'';
+        const expected=localStorage.getItem(DEVICE_PASSWORD_HASH_KEY)||'';
+        const actual=await digestPassword(password,salt);
+        if(!expected||actual!==expected){
+          error.textContent='That password is not correct. Please try again.';
+          input.value='';input.focus();return false;
+        }
+        hideDevicePassword();
+        refreshGreeting();
+      }catch(storageError){
+        error.textContent='APRIL could not save or read your password in this browser. Check browser storage settings.';
+      }
+      return false;
+    };
+
+    refreshGreeting();
+    if(hasDevicePassword()){
+      // Lock the existing dashboard immediately on every fresh page load.
+      showDevicePassword('unlock');
+    }else{
+      startInitialSetup();
+    }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+</script>
+
+
+<script>
+(function(){
+ const KEY='april-custom-theme-v1';
+ const defaults={
+   bg:'#21171d',glow:'#573342',panel:'#30212a',accent:'#e6a8b8',text:'#f8edf1',border:'#59404b',
+   heading:'#f8edf1',muted:'#c6aeb8',button:'#b8758d',buttonText:'#21171d',
+   secondary:'#44303a',secondaryText:'#f0bdca',danger:'#713b4a',dangerText:'#ffe8ee',
+   input:'#261b22',inputText:'#f8edf1',link:'#e6a8b8'
+ };
+ const fields={
+   bg:'themeBg',glow:'themeGlow',panel:'themePanel',accent:'themeAccent',text:'themeText',border:'themeBorder',
+   heading:'themeHeading',muted:'themeMuted',button:'themeButton',buttonText:'themeButtonText',
+   secondary:'themeSecondary',secondaryText:'themeSecondaryText',danger:'themeDanger',dangerText:'themeDangerText',
+   input:'themeInput',inputText:'themeInputText',link:'themeLink'
+ };
+ const layer=document.getElementById('themeLayer');
+ const preview=document.getElementById('themePreview');
+ const inputs=Object.fromEntries(Object.entries(fields).map(([key,id])=>[key,document.getElementById(id)]));
+ let openingTheme=null;
+ function readTheme(){
+   try{return {...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')}}
+   catch(error){return {...defaults}}
+ }
+ function applyTheme(theme){
+   const t={...defaults,...theme};
+   const root=document.documentElement;
+   root.style.setProperty('--bg',t.bg);
+   root.style.setProperty('--panel',t.panel);
+   root.style.setProperty('--panel2',mix(t.panel,t.bg,.22));
+   root.style.setProperty('--line',t.border);
+   root.style.setProperty('--rose',t.accent);
+   root.style.setProperty('--rose2',mix(t.accent,t.panel,.35));
+   root.style.setProperty('--text',t.text);
+   root.style.setProperty('--muted',t.muted);
+   root.style.setProperty('--heading',t.heading);
+   root.style.setProperty('--button-bg',t.button);
+   root.style.setProperty('--button-text',t.buttonText);
+   root.style.setProperty('--secondary-bg',t.secondary);
+   root.style.setProperty('--secondary-text',t.secondaryText);
+   root.style.setProperty('--danger-bg',t.danger);
+   root.style.setProperty('--danger-text',t.dangerText);
+   root.style.setProperty('--input-bg',t.input);
+   root.style.setProperty('--input-text',t.inputText);
+   root.style.setProperty('--link-text',t.link);
+   root.style.setProperty('--theme-bg',t.bg);
+   root.style.setProperty('--theme-glow',t.glow);
+   root.style.setProperty('--theme-panel',t.panel);
+   root.style.setProperty('--theme-accent',t.accent);
+   root.style.setProperty('--theme-text',t.text);
+   root.style.setProperty('--theme-border',t.border);
+   document.body.style.background=`radial-gradient(ellipse at 80% 0%,${t.glow} 0%,transparent 44%),${t.bg}`;
+   document.querySelectorAll('.side,.panel,.stat').forEach(el=>{
+     el.style.background=`linear-gradient(145deg,${withAlpha(t.panel,'ee')},${withAlpha(mix(t.panel,t.bg,.28),'ee')})`;
+     el.style.borderColor=t.border;
+   });
+   document.querySelectorAll('.nav-link:not(.active)').forEach(el=>{
+     el.style.background='';el.style.borderColor='';el.style.color='';
+   });
+   document.querySelectorAll('.nav-link.active').forEach(el=>{
+     el.style.background=mix(t.accent,t.panel,.72);
+     el.style.borderColor=t.accent;
+     el.style.color=t.text;
+   });
+   if(preview){
+     preview.style.setProperty('--theme-bg',t.bg);
+     preview.style.setProperty('--theme-glow',t.glow);
+     preview.style.setProperty('--theme-panel',t.panel);
+     preview.style.setProperty('--theme-accent',t.accent);
+     preview.style.setProperty('--theme-text',t.text);
+     preview.style.setProperty('--theme-border',t.border);
+     preview.style.setProperty('--theme-heading',t.heading);
+     preview.style.setProperty('--theme-button',t.button);
+     preview.style.setProperty('--theme-button-text',t.buttonText);
+   }
+ }
+ function withAlpha(hex,alpha){
+   const h=hex.replace('#','');
+   if(h.length!==6)return hex;
+   return '#'+h+alpha;
+ }
+ function mix(a,b,amount){
+   const aa=a.replace('#',''),bb=b.replace('#','');
+   if(aa.length!==6||bb.length!==6)return a;
+   const av=[0,2,4].map(i=>parseInt(aa.slice(i,i+2),16));
+   const bv=[0,2,4].map(i=>parseInt(bb.slice(i,i+2),16));
+   return '#'+av.map((v,i)=>Math.round(v*(1-amount)+bv[i]*amount).toString(16).padStart(2,'0')).join('');
+ }
+ function getInputs(){return Object.fromEntries(Object.entries(inputs).map(([key,input])=>[key,input.value]))}
+ function setInputs(theme){Object.entries(inputs).forEach(([key,input])=>input.value=theme[key]||defaults[key]);applyTheme(theme)}
+ function open(){
+   openingTheme=readTheme();
+   setInputs(openingTheme);
+   layer.hidden=false;
+ }
+ function close(){layer.hidden=true}
+ document.getElementById('openThemeBtn').addEventListener('click',open);
+ document.getElementById('cancelThemeBtn').addEventListener('click',()=>{
+   applyTheme(readTheme());
+   close();
+ });
+ document.getElementById('resetThemeBtn').addEventListener('click',()=>{
+   setInputs(defaults);
+ });
+ Object.values(inputs).forEach(input=>input.addEventListener('input',()=>applyTheme(getInputs())));
+ document.getElementById('saveThemeBtn').addEventListener('click',()=>{
+   try{
+     const theme=getInputs();
+     localStorage.setItem(KEY,JSON.stringify(theme));
+     applyTheme(theme);
+     close();
+   }catch(error){alert('APRIL could not save your theme in this browser.')}
+ });
+ // Apply saved theme as soon as APRIL loads.
+ applyTheme(readTheme());
+})();
+</script>
+
+
+<script>
+(function(){
+ const KEY='april-image-library-v1';
+ const input=document.getElementById('imageUploadInput');
+ const gallery=document.getElementById('imageGallery');
+ const count=document.getElementById('imageCount');
+ const status=document.getElementById('imageUploadStatus');
+ const searchForm=document.getElementById('imageSearchForm');
+ const searchInput=document.getElementById('imageSearchInput');
+ const searchStatus=document.getElementById('imageSearchStatus');
+ const clearSearch=document.getElementById('clearImageSearch');
+ if(!input||!gallery)return;
+ let images=[];
+ let activeQuery='';
+ try{images=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(images))images=[]}
+ catch(error){images=[]}
+ function save(){
+   try{localStorage.setItem(KEY,JSON.stringify(images));return true}
+   catch(error){status.textContent='Storage is full. Remove some images and try again.';return false}
+ }
+ function render(){
+   count.textContent=images.length+' image'+(images.length===1?'':'s');
+   const query=activeQuery.trim().toLocaleLowerCase();
+   const visible=images.filter(item=>{
+     const title=String(item.title||'').toLocaleLowerCase();
+     const filename=String(item.name||'').toLocaleLowerCase();
+     return !query||title.includes(query)||filename.includes(query);
+   });
+   if(!visible.length){
+     gallery.innerHTML='<div class="empty">'+(images.length?'No images match your search. Try another title or filename.':'Your uploaded images will appear here.')+'</div>';
+     if(searchStatus)searchStatus.textContent=images.length?'No matches found.':'Search your saved images by title or original filename.';
+     return;
+   }
+   gallery.innerHTML='';
+   visible.forEach(item=>{
+     const index=images.findIndex(saved=>saved.id===item.id);
+     const card=document.createElement('article');card.className='image-item';
+     const img=document.createElement('img');img.src=item.src;img.alt=item.title||item.name||'Uploaded image';img.loading='lazy';
+     img.addEventListener('click',()=>{
+       const w=window.open();
+       if(w){w.document.write('<title>'+escapeText(item.title||item.name||'Image')+'</title><img src="'+item.src+'" style="max-width:100%;height:auto;display:block;margin:auto">')}
+     });
+     const info=document.createElement('div');info.className='image-item-info';
+     const name=document.createElement('div');name.className='image-item-name';
+     name.textContent=item.title||'Untitled image';
+     const remove=document.createElement('button');remove.type='button';remove.className='btn secondary';remove.textContent='Remove';remove.setAttribute('aria-label','Remove '+(item.title||item.name||'image'));
+     remove.addEventListener('click',()=>{if(!confirm('Remove this image from your library?'))return;images.splice(index,1);if(save())render()});
+     info.append(name,remove);
+     const editor=document.createElement('div');editor.className='image-title-editor';
+     const titleInput=document.createElement('input');titleInput.type='text';titleInput.maxLength=100;titleInput.value=item.title||'';titleInput.placeholder='Add an image title…';titleInput.setAttribute('aria-label','Image title');
+     const saveTitle=document.createElement('button');saveTitle.type='button';saveTitle.className='btn';saveTitle.textContent='Save title';
+     saveTitle.addEventListener('click',()=>{
+       const nextTitle=titleInput.value.trim();
+       const previousTitle=images[index].title||'';
+       images[index].title=nextTitle;
+       if(save()){render();status.textContent=nextTitle?'Image title saved.':'Image title cleared.'}
+       else images[index].title=previousTitle;
+     });
+     titleInput.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();saveTitle.click()}});
+     editor.append(titleInput,saveTitle);
+     card.append(img,info,editor);gallery.append(card);
+   });
+   if(searchStatus)searchStatus.textContent=query?'Showing '+visible.length+' of '+images.length+' images.':'Showing all '+images.length+' images.';
+ }
+ function escapeText(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+ function compress(file){
+   return new Promise((resolve,reject)=>{
+     const url=URL.createObjectURL(file),img=new Image();
+     img.onload=()=>{
+       const max=1600,scale=Math.min(1,max/Math.max(img.width,img.height));
+       const canvas=document.createElement('canvas');
+       canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));
+       const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,canvas.width,canvas.height);
+       URL.revokeObjectURL(url);
+       try{resolve(canvas.toDataURL('image/jpeg',.76))}
+       catch(error){reject(error)}
+     };
+     img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('This image could not be opened.'))};
+     img.src=url;
+   });
+ }
+ if(searchForm)searchForm.addEventListener('submit',event=>{
+   event.preventDefault();activeQuery=searchInput.value.trim();render();
+ });
+ if(searchInput)searchInput.addEventListener('input',()=>{
+   activeQuery=searchInput.value.trim();render();
+ });
+ if(clearSearch)clearSearch.addEventListener('click',()=>{
+   searchInput.value='';activeQuery='';render();searchInput.focus();
+ });
+ input.addEventListener('change',async()=>{
+   const files=Array.from(input.files||[]).filter(file=>file.type.startsWith('image/'));
+   if(!files.length)return;
+   let added=0;
+   for(const file of files){
+     status.textContent='Preparing '+file.name+'…';
+     try{
+       const src=await compress(file);
+       images.push({id:Date.now()+'-'+Math.random().toString(36).slice(2),name:file.name,title:'',src});
+       if(!save()){images.pop();break}
+       added++;
+     }catch(error){status.textContent='Could not add '+file.name+'. Try another image format.'}
+   }
+   render();
+   if(added)status.textContent=added+' image'+(added===1?'':'s')+' added to your library. You can add a title under each image.';
+   input.value='';
+ });
+ render();
+})();
+</script>
+
+</body>
+</html>
